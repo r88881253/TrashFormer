@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "465765673018",
+    "firebase_url": "https://trashformer-52f7f.firebaseio.com",
+    "project_id": "trashformer-52f7f",
+    "storage_bucket": "trashformer-52f7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465765673018:android:eaa64f5282050abe",
+        "android_client_info": {
+          "package_name": "com.bbhackathon.trashformer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465765673018-bsrd9jjb1iknr1g7gvqei8fti6k1d098.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bbhackathon.trashformer",
+            "certificate_hash": "a002c40c2e3aca7d103c23e45b2e1b99fec7b025"
+          }
+        },
+        {
+          "client_id": "465765673018-baa5abk1sskfd5eocii73tjpp2d60n3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf_tyX3M6jwRcEZuMedYrcl3CQWNoUTzk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "465765673018-baa5abk1sskfd5eocii73tjpp2d60n3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
