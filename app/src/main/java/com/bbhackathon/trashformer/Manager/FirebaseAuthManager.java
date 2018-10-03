@@ -26,35 +26,31 @@ public class FirebaseAuthManager {
         return mFirebaseAuthManager;
     }
 
-    public void login(){
+    public void login(String email, String password, OnCompleteListener<AuthResult> onCompleteListener){
         mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(onCompleteListener);
     }
 
     public FirebaseUser getUser(){
         return mAuth.getCurrentUser();
     }
 
+    public String getUid(){
+        if(getUser() == null){
+            return "9999";
+        }
+        else {
+            return getUser().getUid();
+        }
+    }
+
     public void logout(){
         mAuth.getInstance().signOut();
     }
 
-    public void createUser(String account, String password, Activity activity){
+    public void createUser(String account, String password, OnCompleteListener<AuthResult> onCompleteListener){
         mAuth.createUserWithEmailAndPassword(account, password)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        }
-
-                        // ...
-                    }
-                });
+                .addOnCompleteListener(onCompleteListener);
     }
 
     public void createUser(String account, String password, Activity activity, final FirebaseAuthCallback callback){

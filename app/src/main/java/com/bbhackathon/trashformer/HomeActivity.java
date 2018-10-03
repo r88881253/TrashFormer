@@ -16,16 +16,27 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toast.makeText(HomeActivity.this, FirebaseAuthManager.getInstance().getUser().getEmail(),
-                Toast.LENGTH_SHORT).show();
+        if(FirebaseAuthManager.getInstance()!=null){
+            Toast.makeText(getBaseContext(), FirebaseAuthManager.getInstance().getUser().getEmail(),
+                    Toast.LENGTH_SHORT).show();
+        }
 
         Button btnSetting = findViewById(R.id.btnSetting);
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuthManager.getInstance().logout();
+                Toast.makeText(getBaseContext(), "登出",
+                        Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(HomeActivity.this, BeforeLoginActivity.class);
                 startActivity(i);
+            }
+        });
+
+        Button btnEquipment = findViewById(R.id.equipment);
+        btnEquipment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
 

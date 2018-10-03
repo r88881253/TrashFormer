@@ -9,16 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.LoginActivity"></activity>
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".BeforeLoginActivity">
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BeforeLoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Manager.SettingActivity"></activity>
+        <activity android:name=".Manager.SettingActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

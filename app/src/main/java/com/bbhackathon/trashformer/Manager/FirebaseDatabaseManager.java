@@ -2,9 +2,7 @@ package com.bbhackathon.trashformer.Manager;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseDatabaseManager {
     private String TAG = FirebaseDatabaseManager.class.getSimpleName();
@@ -23,16 +21,10 @@ public class FirebaseDatabaseManager {
         return mFirebaseDatabaseManager;
     }
 
-    public void addUser(String email, String password, String nickName){
-        DatabaseReference ref = mDatabase.getReference("UserTable");
+    public void addUser(ValueEventListener valueEventListener){
+        final DatabaseReference ref = mDatabase.getReference().child("UserTable");
+        ref.addValueEventListener(valueEventListener);
 
-        Map<String, Object> map = new HashMap<>();
 
-        Map<String, String> data = new HashMap<>();
-        data.put("password", password);
-        data.put("nickName", nickName);
-
-        map.put(email, data);
-        ref.updateChildren(map);
     }
 }
