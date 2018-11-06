@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="yellow_background_F6C946">#f6c946</color>
+    <color name="white">#ffffff</color>
+
+    <color name="inputText_4D555B">#4d555b</color>
+
+    <color name="textInputLayoutBorder_3C4349">#3c4349</color>
+
+    <!--progress bar-->
+    <color name="progress_bar_progress_start_F04A4A">#f04a4a</color>
+    <color name="progress_bar_progress_end_F04F4A">#f04f4a</color>
+    <color name="progress_bar_background_end_4D555B">#4d555b</color>
+    <color name="progress_bar_background_start_4D555F">#4d555f</color>
+
+    <!--button-->
+    <color name="btn_login_background_806EE6">#806ee6</color>
+    <color name="btn_login_border_A699ED">#a699ed</color>
+    <color name="btn_home_border_E4E3FB">#e4e3fb</color>
 </resources>

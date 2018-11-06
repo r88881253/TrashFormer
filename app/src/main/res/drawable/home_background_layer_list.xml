@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <color android:color="@color/btn_login_background_806EE6" />
+    </item>
+
+    <item>
+        <bitmap android:src="@drawable/icon_flower"></bitmap>
+    </item>
+    <!--<item android:drawable="@drawable/icon_flower" />-->
+
+    <item
+        android:bottom="17.5dp"
+        android:drawable="@mipmap/login"
+        android:top="22.5dp">
+        <bitmap android:src="@mipmap/login" />
+        <!--<item android:top="22.5dp" android:bottom="17.5dp" android:drawable="@drawable/login">-->
+
+    </item>
+</layer-list>

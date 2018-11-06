@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TrashFormer</string>
-    <string name="account">帳號：</string>
-    <string name="password">密碼：</string>
+    <string name="account">帳號</string>
+    <string name="password">密碼</string>
     <string name="nickName">暱稱：</string>
 
     <string name="create_account">建立帳號</string>
@@ -11,9 +11,16 @@
     <string name="report">報表</string>
     <string name="camera">相機</string>
     <string name="setting">設定</string>
-    <string name="lucky">幸運</string>
-    <string name="vitality">活力</string>
-    <string name="wisdom">智慧</string>
+    <string name="gift">禮物</string>
+    <string name="mission">任務：</string>
+
+    <!--分類-->
+    <string name="aluminum_can">鐵鋁罐</string>
+    <string name="bottle">寶特瓶</string>
+    <string name="glass_can">玻璃瓶</string>
+    <string name="battery">電池</string>
+    <string name="other">其他</string>
+
 
     <string name="create_user_failed">新增用戶失敗，請重試</string>
     <string name="login_failed">登入失敗，請重試</string>

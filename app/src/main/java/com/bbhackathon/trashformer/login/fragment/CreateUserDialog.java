@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.Manager.FirebaseAuthManager;
@@ -51,13 +52,14 @@ public class CreateUserDialog extends DialogFragment{
         binding.setViewmodel(viewmodel);
 //        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getDialog().setCancelable(false);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         return mView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().setCancelable(false);
 
         binding.btnApply.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -107,11 +109,11 @@ public class CreateUserDialog extends DialogFragment{
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
             if(task.isSuccessful()){
-                Log.d(TAG, "login:success\n"+task.getResult());
+                Log.d(TAG, "login_background_layer_list:success\n"+task.getResult());
                 AddUserListener addUserListener = new AddUserListener(FirebaseAuthManager.getInstance().getUid(), viewmodel.getPassword(), viewmodel.getNickName());
                 FirebaseDatabaseManager.getInstance().addUser(addUserListener);
             }else{
-                Log.d(TAG, "login:failure\n"+ task.getException());
+                Log.d(TAG, "login_background_layer_list:failure\n"+ task.getException());
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(getString(R.string.app_name))
                         .setMessage(getString(R.string.login_failed))

@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel;
 
 public class CreateUserViewModel extends ViewModel{
 
-    private MutableLiveData<String> account = new MutableLiveData();
+    private MutableLiveData<String> account = new MutableLiveData<>();
 
     private MutableLiveData<String> password = new MutableLiveData<>();
 
