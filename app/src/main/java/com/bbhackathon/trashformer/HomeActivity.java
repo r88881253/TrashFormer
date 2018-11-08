@@ -1,7 +1,6 @@
 package com.bbhackathon.trashformer;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -22,8 +21,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.Entity.CameraResultEntity;
@@ -41,7 +38,6 @@ import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabelDetecto
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetector;
-import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetectorOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-//        setContentView(R.layout.activity_home);
 
         if (FirebaseAuthManager.getInstance() != null) {
             Toast.makeText(getBaseContext(), FirebaseAuthManager.getInstance().getUser().getEmail(),
@@ -117,109 +112,73 @@ public class HomeActivity extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
 
+//                取得小尺寸照片
 //                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 //                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
 
-//                Bitmap localBitmap;
-//                FirebaseVisionLabelDetectorOptions options = new FirebaseVisionLabelDetectorOptions.Builder()
-//                                .setConfidenceThreshold(0.8f)
-//                                .build();
-
-                FirebaseVisionCloudDetectorOptions options =
-                        new FirebaseVisionCloudDetectorOptions.Builder()
-                                .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
-                                .setMaxResults(15)
-                                .build();
-
-                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can);
-                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
-//                FirebaseVisionLabelDetector detector = FirebaseVision.getInstance().getVisionLabelDetector();
-
-                // Or, to set the minimum confidence required:
-//                FirebaseVisionLabelDetector detector = FirebaseVision.getInstance()
-//                        .getVisionLabelDetector(options);
-
-//                Task<List<FirebaseVisionLabel>> result = detector.detectInImage(image)
-//                        .addOnSuccessListener(
-//                                    new OnSuccessListener<List<FirebaseVisionLabel>>() {
-//                                        @Override
-//                                        public void onSuccess(List<FirebaseVisionLabel> labels) {
-//
-//
-//
-//                                            Intent intent = new Intent(HomeActivity.this, CameraResultActivity.class);
-//                                            intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getCameraResult(labels));
-//                                            startActivity(intent);
-//                                            // Task completed successfully
-//                                            // ...
-//                                        }
-//                                    })
-//                        .addOnFailureListener(
-//                                    new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            // Task failed with an exception
-//                                            // ...
-//                                        }
-//                                    });
-
-
-                 FirebaseVisionCloudLabelDetector detector = FirebaseVision.getInstance()
-                    .getVisionCloudLabelDetector(options);
-
-
-                Task<List<FirebaseVisionCloudLabel>> result =
-                        detector.detectInImage(image)
-                                .addOnSuccessListener(
-                                        new OnSuccessListener<List<FirebaseVisionCloudLabel>>() {
-                                            @Override
-                                            public void onSuccess(List<FirebaseVisionCloudLabel> labels) {
-                                                Intent intent = new Intent(HomeActivity.this, CameraResultActivity.class);
-                                                intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getCameraResult(labels));
-                                                startActivity(intent);
-                                            }
-                                        })
-                                .addOnFailureListener(
-                                        new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // Task failed with an exception
-                                                // ...
-                                            }
-                                        });
-
 //                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(getBitmapFromUri(Uri.parse(mCurrentPhotoPath)));
-//                mBinding.monsterImage.setImageURI(Uri.parse(mCurrentPhotoPath));
-//                mBinding.monsterImage.setRotation(90);
-//
-//                ExifInterface exifInterface = null;
-//                try {
-//                    exifInterface = new ExifInterface(mCurrentPhotoPath);
-//                    int tag = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
-//                    if (tag == ExifInterface.ORIENTATION_ROTATE_90) {//如果是旋转地图片则先旋转
-//                        mBinding.monsterImage.setRotation(90);
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
+                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can);
+                cloudLabelDetectTask(source);
+                visionLabelDetectTask(source);
             }
         }
 
     }
 
-    private List<CameraResultEntity> getCameraResult(List<FirebaseVisionCloudLabel> labels){
+    private void cloudLabelDetectTask(Bitmap source) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
+        FirebaseVisionCloudDetectorOptions options =
+                new FirebaseVisionCloudDetectorOptions.Builder()
+                        .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
+                        .setMaxResults(15)
+                        .build();
+        FirebaseVisionCloudLabelDetector detector = FirebaseVision.getInstance()
+                .getVisionCloudLabelDetector(options);
+
+
+        Task<List<FirebaseVisionCloudLabel>> result =
+                detector.detectInImage(image)
+                        .addOnSuccessListener(
+                                new OnSuccessListener<List<FirebaseVisionCloudLabel>>() {
+                                    @Override
+                                    public void onSuccess(List<FirebaseVisionCloudLabel> labels) {
+                                        Intent intent = new Intent(HomeActivity.this, CameraResultActivity.class);
+                                        intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getCloudCameraResult(labels));
+                                        startActivity(intent);
+                                    }
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Task failed with an exception
+                                        // ...
+                                    }
+                                });
+
+    }
+
+    private List<CameraResultEntity> getCloudCameraResult(List<FirebaseVisionCloudLabel> labels) {
 
         List<CameraResultEntity> entity = new ArrayList<>();
-        for (FirebaseVisionCloudLabel label: labels) {
+        for (FirebaseVisionCloudLabel label : labels) {
             entity.add(new CameraResultEntity(label.getLabel(), label.getEntityId(), label.getConfidence()));
         }
 
         return entity;
     }
 
-    public static Bitmap RotateBitmap(Bitmap source, float angle)
-    {
+    private List<CameraResultEntity> getVisionCameraResult(List<FirebaseVisionLabel> labels) {
+
+        List<CameraResultEntity> entity = new ArrayList<>();
+        for (FirebaseVisionLabel label : labels) {
+            entity.add(new CameraResultEntity(label.getLabel(), label.getEntityId(), label.getConfidence()));
+        }
+
+        return entity;
+    }
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
@@ -300,16 +259,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    //拍照，小尺寸
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         String f = System.currentTimeMillis() + ".jpg";
         Uri fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory("").getPath() + f));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); //指定圖片存放位置，指定後，在onActivityResult裏得到的Data將為null
         startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-//                File tmpFile = new File(Environment.getExternalStorageDirectory(),"image.jpg");
-//                Uri outputFileUri = Uri.fromFile(tmpFile);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
     }
 
@@ -375,9 +331,11 @@ public class HomeActivity extends AppCompatActivity {
         }
         return degree;
     }
+
     /**
      * 旋轉圖片
-     * @param angle 被旋轉角度
+     *
+     * @param angle  被旋轉角度
      * @param bitmap 圖片物件
      * @return 旋轉後的圖片
      */
@@ -398,5 +356,39 @@ public class HomeActivity extends AppCompatActivity {
             bitmap.recycle();
         }
         return returnBm;
+    }
+
+    private void visionLabelDetectTask(Bitmap source) {
+        FirebaseVisionLabelDetector detector = FirebaseVision.getInstance().getVisionLabelDetector();
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
+
+//         Or, to set the minimum confidence required:
+//         FirebaseVisionLabelDetectorOptions options = new FirebaseVisionLabelDetectorOptions.Builder()
+//                                .setConfidenceThreshold(0.8f)
+//                                .build();
+//        FirebaseVisionLabelDetector detector = FirebaseVision.getInstance()
+//                .getVisionLabelDetector(options);
+
+        Task<List<FirebaseVisionLabel>> result = detector.detectInImage(image)
+                .addOnSuccessListener(
+                        new OnSuccessListener<List<FirebaseVisionLabel>>() {
+                            @Override
+                            public void onSuccess(List<FirebaseVisionLabel> labels) {
+
+                                Intent intent = new Intent(HomeActivity.this, CameraResultActivity.class);
+                                intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getVisionCameraResult(labels));
+                                startActivity(intent);
+                                // Task completed successfully
+                                // ...
+                            }
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Task failed with an exception
+                                // ...
+                            }
+                        });
     }
 }

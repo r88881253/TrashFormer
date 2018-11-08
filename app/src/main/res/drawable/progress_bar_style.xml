@@ -2,15 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@android:id/background">
-        <clip>
-            <shape>
-                <gradient
-                    android:endColor="@color/progress_bar_background_end_4D555B"
-                    android:startColor="@color/progress_bar_background_start_4D555F"/>
+        <shape>
+            <gradient
+                android:endColor="@color/progress_bar_background_end_4D555B"
+                android:startColor="@color/progress_bar_background_start_4D555F"/>
 
-            </shape>
-        </clip>
-
+        </shape>
     </item>
 
 

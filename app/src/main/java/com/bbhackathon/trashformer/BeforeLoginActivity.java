@@ -1,7 +1,6 @@
 package com.bbhackathon.trashformer;
 
 import android.content.Intent;
-import android.media.session.MediaController;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
@@ -23,26 +22,7 @@ public class BeforeLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_before_login);
-
-//        GifImageView gifImageView = (GifImageView) findViewById(R.id.beforeLoginGif);
-//
-//
-//        try {
-//            // 如果加载的是gif动图，第一步需要先将gif动图资源转化为GifDrawable
-//            // 将gif图资源转化为GifDrawable
-//            GifDrawable gifDrawable = new GifDrawable(getResources(), R.drawable.test);
-//
-//            // gif1加载一个动态图gif
-//            gifImageView.setImageDrawable(gifDrawable);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        playGif(gifImageView);
-
-
-
+//        initGif(R.id.beforeLoginGif);
     }
 
     @Override
@@ -54,6 +34,24 @@ public class BeforeLoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         checkLogin();
+    }
+
+    private void initGif(int gifImageViewId){
+        GifImageView gifImageView = (GifImageView) findViewById(gifImageViewId);
+
+        try {
+            // 如果加载的是gif动图，第一步需要先将gif动图资源转化为GifDrawable
+            // 将gif图资源转化为GifDrawable
+            GifDrawable gifDrawable = new GifDrawable(getResources(), R.drawable.test);
+
+            // gif1加载一个动态图gif
+            gifImageView.setImageDrawable(gifDrawable);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        playGif(gifImageView);
     }
 
     public void playGif(final GifImageView gifImageView){
