@@ -30,7 +30,7 @@
             android:name=".HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BeforeLoginActivity"
+            android:name=".login.BeforeLoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Manager.SettingActivity"
+            android:name=".manager.SettingActivity"
             android:screenOrientation="portrait" />
 
         <provider
@@ -53,11 +53,15 @@
         </provider>
 
         <activity android:name=".equipment.EquipmentActivity" />
-        <activity android:name=".camera.CameraResultActivity"></activity>
+        <activity android:name=".camera.CameraResultActivity" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="label" />
+
+        <activity android:name=".login.ChooseCategoryActivity" />
+        <activity android:name=".setting.settingActivity" />
+        <activity android:name=".leaderboard.LeaderBoardActivity"></activity>
     </application>
 
 </manifest>

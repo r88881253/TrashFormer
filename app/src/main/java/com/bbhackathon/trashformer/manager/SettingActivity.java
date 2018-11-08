@@ -1,4 +1,4 @@
-package com.bbhackathon.trashformer.Manager;
+package com.bbhackathon.trashformer.manager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

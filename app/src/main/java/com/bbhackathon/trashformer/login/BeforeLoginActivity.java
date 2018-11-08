@@ -1,4 +1,4 @@
-package com.bbhackathon.trashformer;
+package com.bbhackathon.trashformer.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
-import com.bbhackathon.trashformer.Manager.FirebaseAuthManager;
-import com.bbhackathon.trashformer.Manager.LoginManager;
-import com.bbhackathon.trashformer.login.LoginActivity;
+import com.bbhackathon.trashformer.HomeActivity;
+import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
+import com.bbhackathon.trashformer.manager.LoginManager;
 import com.google.firebase.auth.FirebaseUser;
 
 import pl.droidsonroids.gif.GifDrawable;

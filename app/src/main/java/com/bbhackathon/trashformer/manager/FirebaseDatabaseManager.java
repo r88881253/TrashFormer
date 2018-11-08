@@ -1,4 +1,4 @@
-package com.bbhackathon.trashformer.Manager;
+package com.bbhackathon.trashformer.manager;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

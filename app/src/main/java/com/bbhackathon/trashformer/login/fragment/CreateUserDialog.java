@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.bbhackathon.trashformer.HomeActivity;
-import com.bbhackathon.trashformer.Manager.FirebaseAuthManager;
-import com.bbhackathon.trashformer.Manager.FirebaseDatabaseManager;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
+import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.databinding.DialogCreateUserBinding;
 import com.google.android.gms.tasks.OnCompleteListener;

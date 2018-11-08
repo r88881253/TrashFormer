@@ -23,8 +23,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bbhackathon.trashformer.Entity.CameraResultEntity;
-import com.bbhackathon.trashformer.Manager.FirebaseAuthManager;
+import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.login.BeforeLoginActivity;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
@@ -44,7 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bbhackathon.trashformer.Util.ExtraKey.INTENT_CAMERA_RESULT;
+import static com.bbhackathon.trashformer.util.ExtraKey.INTENT_CAMERA_RESULT;
 
 public class HomeActivity extends AppCompatActivity {
     private final String TAG = HomeActivity.class.getSimpleName();
@@ -77,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        mBinding.equipment.setOnClickListener(new View.OnClickListener() {
+        mBinding.btnEquipment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, EquipmentActivity.class);

@@ -1,4 +1,4 @@
-package com.bbhackathon.trashformer.Manager;
+package com.bbhackathon.trashformer.manager;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;

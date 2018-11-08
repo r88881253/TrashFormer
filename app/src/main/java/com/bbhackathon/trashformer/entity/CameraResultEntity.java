@@ -1,4 +1,4 @@
-package com.bbhackathon.trashformer.Entity;
+package com.bbhackathon.trashformer.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
