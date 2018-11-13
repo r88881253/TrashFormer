@@ -8,3 +8,6 @@ This is a project about Visual Recognization which used to recognize recycle stu
 ## Firebase實作技術
 - Authentication: `Email`
 - Database: `NoSQL`
+- Storage: `image`
+- ML Kit: `CloudLabel`
+- Functions: `Node.js`
