@@ -5,7 +5,6 @@
     <solid android:color="@color/white" />
     <!-- 文字與邊框的間距 -->
     <padding
-        android:bottom="16dp"
         android:top="16dp" />
     <!-- 設置圓角 -->
     <corners android:radius="15dp" />

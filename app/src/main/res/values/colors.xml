@@ -25,4 +25,8 @@
     <color name="btn_home_border_E4E3FB">#e4e3fb</color>
     <color name="btn_logout_background_F04848">#f04848</color>
     <color name="btn_logout_border_F69191">#f69191</color>
+
+    <!--barchar barColor-->
+    <color name="bar_purple_C9C6F7">#c9c6f7</color>
+    <color name="bar_yellow_FCDC85">#fcdc85</color>
 </resources>
