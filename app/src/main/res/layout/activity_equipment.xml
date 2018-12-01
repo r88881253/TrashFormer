@@ -1,46 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_up_background_layer_list"
     android:orientation="vertical"
     tools:context=".equipment.EquipmentActivity">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/avatar_relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="600dp">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
 
-        <Button
-            android:id="@+id/btnEnable"
+        <ImageView
+            android:id="@+id/avatar_head"
+            android:layout_width="280dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:elevation="1dp"
+            android:src="@drawable/avartar_head_xmas_hat" />
+
+        <LinearLayout
+            android:id="@+id/avatar_body_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="enable"/>
+            android:layout_below="@id/avatar_head"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-130dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="-25dp"
+                android:layout_toLeftOf="@id/avatar_body"
+                android:src="@drawable/avatar_left_candycane" />
 
+            <ImageView
+                android:id="@+id/avatar_body"
+                android:layout_width="240dp"
+                android:layout_height="280dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/avatar_body_normal" />
 
-        <android.support.design.widget.TabLayout
-            android:background="@color/common_google_signin_btn_text_light_default"
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="240dp"
+                android:layout_marginLeft="-25dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/avatar_body"
+                android:src="@drawable/avatar_right_normal" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"/>
+            android:layout_below="@id/avatar_body_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-55dp"
+            android:src="@drawable/avatar_feet_normal" />
 
+    </RelativeLayout>
 
-    <com.bbhackathon.trashformer.equipment.FCViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include
+        layout="@layout/dialog_equipment"
+        android:layout_width="680dp"
+        android:layout_height="670dp"
+        android:layout_below="@id/avatar_relativeLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" />
 
-
-    </com.bbhackathon.trashformer.equipment.FCViewPager>
-    <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-    <!--</android.support.v4.view.ViewPager>-->
-
-</LinearLayout>
+</RelativeLayout>

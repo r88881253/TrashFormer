@@ -10,6 +10,9 @@
 
     <color name="textInputLayoutBorder_3C4349">#3c4349</color>
 
+    <!--leaderboard-->
+    <color name="leaderboard_background_F04848">#f04848</color>
+
     <!--progress bar-->
     <color name="progress_bar_progress_start_F04A4A">#f04a4a</color>
     <color name="progress_bar_progress_end_F04F4A">#f04f4a</color>
@@ -20,4 +23,6 @@
     <color name="btn_login_background_806EE6">#806ee6</color>
     <color name="btn_login_border_A699ED">#a699ed</color>
     <color name="btn_home_border_E4E3FB">#e4e3fb</color>
+    <color name="btn_logout_background_F04848">#f04848</color>
+    <color name="btn_logout_border_F69191">#f69191</color>
 </resources>

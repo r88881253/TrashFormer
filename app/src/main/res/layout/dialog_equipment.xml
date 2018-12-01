@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="680dp"
+    android:layout_height="670dp"
+    android:background="@drawable/dialog_default_shape">
+
+    <ImageView
+        android:id="@+id/equipment_category_imageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/home_equipment" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/equipment_tabLayout"
+        style="@style/MyCustomTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/equipment_category_imageView"
+        android:layout_marginBottom="10dp"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed" />
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@+id/equipment_tabLayout"
+        android:background="@color/btn_home_border_E4E3FB" />
+
+
+    <com.bbhackathon.trashformer.equipment.EquipmentViewPager
+        android:id="@+id/equipment_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizontal_line" />
+
+
+</RelativeLayout>

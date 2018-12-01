@@ -5,8 +5,8 @@
 
         <shape android:shape="rectangle">
             <size
-                android:width="120dp"
-                android:height="120dp" />
+                android:width="240dp"
+                android:height="240dp" />
             <solid android:color="@color/white" />
 
             <corners
@@ -14,7 +14,7 @@
                 android:bottomRightRadius="5dp"
                 android:topLeftRadius="5dp"
                 android:topRightRadius="5dp" />
-            btn_setting_shape
+
             <stroke
                 android:width="4dp"
                 android:color="@color/btn_home_border_E4E3FB" />
@@ -23,9 +23,9 @@
     </item>
 
     <item
-        android:width="120dp"
-        android:height="120dp"
-        android:drawable="@drawable/home_settings"
+        android:width="240dp"
+        android:height="240dp"
+        android:drawable="@drawable/xmas_hat"
         android:gravity="center">
         <scale></scale>
     </item>

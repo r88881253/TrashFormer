@@ -21,6 +21,13 @@
     <string name="battery">電池</string>
     <string name="other">其他</string>
 
+    <!--報表頁-->
+    <string name="recycle_proportion">回收比例</string>
+    <string name="recycle_amount">回收數量</string>
+
+    <!--設定頁-->
+    <string name="select_recycle_item">選擇辨識物品</string>
+    <string name="logout">登出帳號</string>
 
     <string name="create_user_failed">新增用戶失敗，請重試</string>
     <string name="login_failed">登入失敗，請重試</string>
@@ -28,4 +35,6 @@
 
     <string name="confirm">確認</string>
     <string name="cancel">取消</string>
+
+
 </resources>

@@ -14,10 +14,10 @@
                 android:bottomRightRadius="5dp"
                 android:topLeftRadius="5dp"
                 android:topRightRadius="5dp" />
-            btn_setting_shape
+
             <stroke
                 android:width="4dp"
-                android:color="@color/btn_home_border_E4E3FB" />
+                android:color="@color/textInputLayoutBorder_3C4349" />
         </shape>
 
     </item>
@@ -25,7 +25,7 @@
     <item
         android:width="120dp"
         android:height="120dp"
-        android:drawable="@drawable/home_settings"
+        android:drawable="@drawable/btn_glass"
         android:gravity="center">
         <scale></scale>
     </item>

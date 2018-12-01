@@ -8,4 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <!--tabLayout-->
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="tabSelectedTextColor">@color/progress_bar_background_end_4D555B</item>
+    </style>
+
+    <style name="MyCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/btn_home_border_E4E3FB</item>
+    </style>
+
+
+    <!--tabLayout-->
+    <style name="MyCustomTabLayout2" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabText2</item>
+        <item name="tabSelectedTextColor">@color/inputText_4D555B</item>
+    </style>
+
+    <style name="MyCustomTabText2" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">100sp</item>
+        <item name="android:textColor">@color/progress_bar_progress_start_F04A4A</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+
 </resources>

@@ -5,16 +5,16 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class FCViewPager extends ViewPager {
+public class EquipmentViewPager extends ViewPager {
 
     private boolean enableSwipe;
 
-    public FCViewPager(Context context) {
+    public EquipmentViewPager(Context context) {
         super(context);
         init();
     }
 
-    public FCViewPager(Context context, AttributeSet attrs) {
+    public EquipmentViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }

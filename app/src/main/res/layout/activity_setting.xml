@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".manager.SettingActivity">
+    android:background="@drawable/home_up_background_layer_list"
+    tools:context=".setting.SettingActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/avatar_head"
+            android:layout_width="280dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:elevation="1dp"
+            android:src="@drawable/avartar_head_xmas_hat" />
+
+        <LinearLayout
+            android:id="@+id/avatar_body_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/avatar_head"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-130dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="-25dp"
+                android:layout_toLeftOf="@id/avatar_body"
+                android:src="@drawable/avatar_left_candycane" />
+
+            <ImageView
+                android:id="@+id/avatar_body"
+                android:layout_width="240dp"
+                android:layout_height="280dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/avatar_body_normal" />
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="240dp"
+                android:layout_marginLeft="-25dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/avatar_body"
+                android:src="@drawable/avatar_right_normal" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/avatar_body_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-55dp"
+            android:src="@drawable/avatar_feet_normal" />
+
+    </RelativeLayout>
+
+
+    <include
+        layout="@layout/dialog_setting"
+        android:layout_width="680dp"
+        android:layout_height="670dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" />
+
+</RelativeLayout>

@@ -24,11 +24,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
 import com.bbhackathon.trashformer.login.BeforeLoginActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
+import com.bbhackathon.trashformer.setting.SettingActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -67,16 +69,6 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
-        mBinding.btnSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuthManager.getInstance().logout();
-                Toast.makeText(getBaseContext(), "登出",
-                        Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(HomeActivity.this, BeforeLoginActivity.class);
-                startActivity(i);
-            }
-        });
 
         mBinding.btnEquipment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +78,31 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+        mBinding.btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, LeaderBoardActivity.class);
+                startActivity(i);
+            }
+
+        });
+
+
         mBinding.btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestPermission();
             }
 
+        });
+
+        mBinding.btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, SettingActivity.class);
+                startActivity(i);
+            }
         });
 
     }
