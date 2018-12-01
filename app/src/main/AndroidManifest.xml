@@ -38,9 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".manager.SettingActivity"
-            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -60,8 +57,9 @@
             android:value="label" />
 
         <activity android:name=".login.ChooseCategoryActivity" />
-        <activity android:name=".setting.settingActivity" />
-        <activity android:name=".leaderboard.LeaderBoardActivity"></activity>
+        <activity android:name=".setting.SettingActivity" />
+        <activity android:name=".leaderboard.LeaderBoardActivity" />
+        <activity android:name=".chooseRecycleItem.ChooseRecycleItemActivity"></activity>
     </application>
 
 </manifest>
