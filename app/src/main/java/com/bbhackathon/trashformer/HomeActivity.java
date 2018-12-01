@@ -144,9 +144,9 @@ public class HomeActivity extends AppCompatActivity {
 //                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
 
 //                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(getBitmapFromUri(Uri.parse(mCurrentPhotoPath)));
-                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can);
+                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can2);
                 cloudLabelDetectTask(source);
-                visionLabelDetectTask(source);
+//                visionLabelDetectTask(source);
             }
         }
 
