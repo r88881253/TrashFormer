@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.type.ResultType;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -22,16 +23,17 @@ public class CameraResultActivity extends AppCompatActivity {
 
         ArrayList<CameraResultEntity> entityList = getIntent().getParcelableArrayListExtra(INTENT_CAMERA_RESULT);
 
-        String cameraResult = "";
+        ResultAnalysis resultAnalysis = new ResultAnalysis();
 
-        String jsonString = new Gson().toJson(entityList, List.class);
+        ResultType resultType = resultAnalysis.doAnalysis(entityList);
+
+        String cameraResult = "Result : " + resultType.getMemo() + "\n";
 
         for(CameraResultEntity entity: entityList){
             String text = entity.getText();
-            String entityId = entity.getEntityId();
             float confident = entity.getConfidence();
 
-            String result = "text:" + text +"\t\t\t" + "entityId:" + entityId +"\t\t\t" + "confident:" + confident + "\n";
+            String result = "text:" + text +"\t\t\t" + "confident:" + confident + "\n";
             cameraResult = cameraResult + result;
         }
 
