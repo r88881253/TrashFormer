@@ -31,7 +31,7 @@
 
     <string name="create_user_failed">新增用戶失敗，請重試</string>
     <string name="login_failed">登入失敗，請重試</string>
-    <string name="add_user_to_database_failed">發生一點錯誤，請重試</string>
+    <string name="add_user_to_database_failed">發生錯誤，請重試</string>
 
     <string name="confirm">確認</string>
     <string name="cancel">取消</string>
