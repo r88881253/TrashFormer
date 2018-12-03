@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
 import com.bbhackathon.trashformer.login.BeforeLoginActivity;
@@ -51,7 +52,7 @@ import java.util.List;
 
 import static com.bbhackathon.trashformer.util.ExtraKey.INTENT_CAMERA_RESULT;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
     private final String TAG = HomeActivity.class.getSimpleName();
 
     private final int REQUEST_CAMERA = 1001;
@@ -107,19 +108,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-        Window window = this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(this,R.color.btn_login_background_806EE6));
-        }
+        setStatusBar(R.color.btn_login_background_806EE6);
     }
 
     @Override

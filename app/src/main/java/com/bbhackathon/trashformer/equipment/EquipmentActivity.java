@@ -10,11 +10,12 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EquipmentActivity extends AppCompatActivity {
+public class EquipmentActivity extends BaseActivity {
 
     private EquipmentViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -46,6 +47,7 @@ public class EquipmentActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.equipment_tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
 
+        setStatusBar(R.color.btn_login_background_806EE6);
     }
 
     private void setupViewPager(ViewPager viewPager) {

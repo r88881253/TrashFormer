@@ -56,10 +56,10 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="label" />
 
-        <activity android:name=".login.ChooseCategoryActivity" />
         <activity android:name=".setting.SettingActivity" />
         <activity android:name=".leaderboard.LeaderBoardActivity" />
-        <activity android:name=".chooseRecycleItem.ChooseRecycleItemActivity"></activity>
+        <activity android:name=".chooseRecycleCategory.ChooseRecycleCategoryActivity" />
+        <activity android:name=".createUser.CreateUserActivity"></activity>
     </application>
 
 </manifest>

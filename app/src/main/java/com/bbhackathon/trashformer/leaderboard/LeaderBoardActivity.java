@@ -13,13 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
 import com.bbhackathon.trashformer.equipment.EquipmentViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeaderBoardActivity extends AppCompatActivity {
+public class LeaderBoardActivity extends BaseActivity {
 
     private EquipmentViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -50,6 +51,8 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         mTabLayout = (TabLayout) findViewById(R.id.leaderboard_tabLayout);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        setStatusBar(R.color.leaderboard_background_F04848);
     }
 
     @Override

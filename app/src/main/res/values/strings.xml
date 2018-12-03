@@ -18,16 +18,28 @@
     <string name="aluminum_can">鐵鋁罐</string>
     <string name="bottle">寶特瓶</string>
     <string name="glass_can">玻璃瓶</string>
-    <string name="battery">電池</string>
+    <string name="battery">電池&#160;&#160;&#160;&#160;</string>
     <string name="other">其他</string>
+    <string name="select_device_recycle_item">選擇裝置辨識物</string>
 
     <!--報表頁-->
     <string name="recycle_proportion">回收比例</string>
     <string name="recycle_amount">回收數量</string>
 
+    <!--相機結果頁-->
+    <string name="result">結果</string>
+    <string name="you_know">/ 你知道嗎 /</string>
+    <string name="default_tips">每天商家使用的紙餐具或是紙盒，為了防水通常會在內層表面塗上一層（約 5%-7%）聚乙烯（polyethylene, PE）膠膜，或是經過浸蠟處理，讓紙杯、紙製免洗餐具變質，導致後續的回收處理困難度激增。
+
+\n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(newtalk.tw)</string>
+    <string name="keep_recognize">繼續辨識</string>
+    <string name="back_home">回到首頁</string>
+
     <!--設定頁-->
     <string name="select_recycle_item">選擇辨識物品</string>
     <string name="logout">登出帳號</string>
+    <string name="logout_confirm">是否確定登出此帳號？</string>
+    <string name="btn_logout_confirm">確認登出</string>
 
     <string name="create_user_failed">新增用戶失敗，請重試</string>
     <string name="login_failed">登入失敗，請重試</string>

@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.bbhackathon.trashformer.R;
-import com.bbhackathon.trashformer.chooseRecycleItem.ChooseRecycleItemActivity;
+import com.bbhackathon.trashformer.chooseRecycleCategory.ChooseRecycleCategoryActivity;
 import com.bbhackathon.trashformer.databinding.DialogCreateUserBinding;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.google.android.gms.tasks.Continuation;
@@ -164,7 +164,7 @@ public class CreateUserDialog extends DialogFragment{
     }
 
     private void startChooseRecycleItem(){
-        Intent i = new Intent(getActivity(), ChooseRecycleItemActivity.class);
+        Intent i = new Intent(getActivity(), ChooseRecycleCategoryActivity.class);
         startActivity(i);
     }
 

@@ -2,12 +2,13 @@ package com.bbhackathon.trashformer.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.base.BaseActivity;
+import com.bbhackathon.trashformer.chooseRecycleCategory.ChooseRecycleCategoryActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class BeforeLoginActivity extends AppCompatActivity {
+public class BeforeLoginActivity extends BaseActivity {
 
     LoginManager mLoginmanager;
 
@@ -24,6 +25,7 @@ public class BeforeLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_before_login);
 //        initGif(R.id.beforeLoginGif);
+        setStatusBar(R.color.yellow_background_F6C946);
     }
 
     @Override
@@ -83,8 +85,13 @@ public class BeforeLoginActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuthManager.getInstance().getUser();
 
         if(user != null){
-            Intent intent = new Intent(BeforeLoginActivity.this, HomeActivity.class);
-            startActivity(intent);
+            if(mLoginmanager.getRecycleCategory() == null || mLoginmanager.getRecycleCategory().isEmpty()){
+                Intent intent = new Intent(BeforeLoginActivity.this, ChooseRecycleCategoryActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(BeforeLoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
         }
         else{
             Intent intent = new Intent(BeforeLoginActivity.this, LoginActivity.class);

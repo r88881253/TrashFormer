@@ -9,10 +9,12 @@ import android.widget.Toast;
 
 import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.login.BeforeLoginActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
+import com.bbhackathon.trashformer.setting.logout.LogoutDialog;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +24,12 @@ public class SettingActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.btnLogout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuthManager.getInstance().logout();
-                Toast.makeText(getBaseContext(), "登出",
-                        Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(SettingActivity.this, BeforeLoginActivity.class);
-                startActivity(i);
+                LogoutDialog dialog = new LogoutDialog();
+                dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
+
+        hideKeyboard();
+        setStatusBar(R.color.btn_login_background_806EE6);
     }
 }

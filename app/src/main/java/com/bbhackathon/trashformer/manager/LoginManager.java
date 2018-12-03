@@ -6,17 +6,33 @@ import android.content.SharedPreferences;
 public class LoginManager {
 
     private static LoginManager mLoginManager;
+    private String SHARE_PREFERENCE_KEY_RECYCLE_CATEGORY = "SHARE_PREFERENCE_KEY_RECYCLE_CATEGORY";
     private String SHARE_PREFERENCE_KEY_ACCOUNT = "SHARE_PREFERENCE_KEY_ACCOUNT";
     private String SHARE_PREFERENCE_KEY_PASSWORD = "SHARE_PREFERENCE_KEY_PASSWORD";
 
-    private SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
+
+    private LoginManager(){}
 
     public LoginManager(Context context){
+        mLoginManager = this;
         sharedPreferences = context.getSharedPreferences("TrashFormer", context.MODE_PRIVATE);
     }
 
-    public LoginManager getInstance(){
+    public static LoginManager getInstance(){
         return mLoginManager;
+    }
+
+    public void setRecycleCategory(String recycleCategory){
+        sharedPreferences.edit().putString(SHARE_PREFERENCE_KEY_RECYCLE_CATEGORY, recycleCategory).apply();
+    }
+
+    public String getRecycleCategory(){
+        return sharedPreferences.getString(SHARE_PREFERENCE_KEY_RECYCLE_CATEGORY, "");
+    }
+
+    public void clearRecycleCategory(){
+        sharedPreferences.edit().remove(SHARE_PREFERENCE_KEY_RECYCLE_CATEGORY).commit();
     }
 
     public void setUserID(String userID){

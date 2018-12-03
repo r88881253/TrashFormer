@@ -8,5 +8,5 @@
     <!-- 邊框線 -->
     <stroke
         android:width="4dp"
-        android:color="@color/btn_home_border_E4E3FB" />
+        android:color="@color/textInputLayoutBorder_3C4349" />
 </shape>
