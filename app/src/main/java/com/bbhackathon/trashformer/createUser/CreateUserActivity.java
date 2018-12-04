@@ -4,9 +4,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class CreateUserActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(!Strings.isEmptyOrWhitespace(viewmodel.getAccount()) && !Strings.isEmptyOrWhitespace(viewmodel.getPassword()) && !Strings.isEmptyOrWhitespace(viewmodel.getNickName())){
-                    createUser(viewmodel.getAccount(), viewmodel.getPassword(), viewmodel.getNickName());
+                    createUser(viewmodel.getAccount(), DigestUtils.sha256Hex(viewmodel.getPassword()), viewmodel.getNickName());
                 }
 
             }
@@ -66,7 +68,7 @@ public class CreateUserActivity extends BaseActivity {
             public void onComplete(@NonNull Task task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "createUserWithEmail:success\n"+task.getResult());
-                    FirebaseAuthManager.getInstance().login(account, password, new LoginOnCompleteListener(nickName));
+                    FirebaseAuthManager.getInstance().login(account, password, new LoginOnCompleteListener(password, nickName));
 
                 }else{
                     Log.d(TAG, "createUserWithEmail:failure\n"+ task.getException());
@@ -85,9 +87,12 @@ public class CreateUserActivity extends BaseActivity {
     }
 
     class LoginOnCompleteListener implements OnCompleteListener<AuthResult>{
+        String password;
         String nickName;
 
-        public LoginOnCompleteListener(String nickName) {
+
+        public LoginOnCompleteListener(String password, String nickName) {
+            this.password = password;
             this.nickName = nickName;
         }
 
@@ -97,7 +102,7 @@ public class CreateUserActivity extends BaseActivity {
                 Log.d(TAG, "login_background_layer_list:success\n"+task.getResult());
 //                AddUserListener addUserListener = new AddUserListener(FirebaseAuthManager.getInstance().getUid(), viewmodel.getPassword(), viewmodel.getNickName());
 //                FirebaseDatabaseManager.getInstance().addUser(addUserListener);
-                addUserToDatabase(nickName);
+                addUserToDatabase(password, nickName);
             }else{
                 Log.d(TAG, "login_background_layer_list:failure\n"+ task.getException());
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateUserActivity.this);
@@ -113,8 +118,8 @@ public class CreateUserActivity extends BaseActivity {
         }
     }
 
-    private void addUserToDatabase(String nickname){
-        addUserToDatabaseTask(nickname)
+    private void addUserToDatabase(String password, String nickname){
+        addUserToDatabaseTask(password, nickname)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
@@ -149,13 +154,14 @@ public class CreateUserActivity extends BaseActivity {
         startActivity(i);
     }
 
-    private Task<String> addUserToDatabaseTask(String text) {
+    private Task<String> addUserToDatabaseTask(String password, String nickName) {
         FirebaseFunctions mFunctions;
         mFunctions = FirebaseFunctions.getInstance();
 
         // Create the arguments to the callable function.
         Map<String, Object> data = new HashMap<>();
-        data.put("text", text);
+        data.put("password", password);
+        data.put("nickName", nickName);
         data.put("push", true);
 
         return mFunctions
