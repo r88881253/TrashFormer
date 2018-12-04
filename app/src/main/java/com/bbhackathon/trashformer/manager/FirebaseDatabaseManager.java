@@ -24,7 +24,10 @@ public class FirebaseDatabaseManager {
     public void addUser(ValueEventListener valueEventListener){
         final DatabaseReference ref = mDatabase.getReference().child("UserTable");
         ref.addValueEventListener(valueEventListener);
+    }
 
-
+    public void selectUserProfileTable(String uid, ValueEventListener valueEventListener){
+        DatabaseReference ref = mDatabase.getReference().child("UserTable/" + uid + "/UserProfileTable");
+        ref.addValueEventListener(valueEventListener);
     }
 }

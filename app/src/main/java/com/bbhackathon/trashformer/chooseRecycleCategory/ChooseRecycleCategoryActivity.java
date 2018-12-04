@@ -23,8 +23,6 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_recycle_category);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_choose_recycle_category);
 
         initView();
@@ -33,8 +31,9 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
     }
 
     private void initView() {
-        String recycleCategory = LoginManager.getInstance().getRecycleCategory();
+        uncheckLinearLayout();
 
+        String recycleCategory = LoginManager.getInstance().getRecycleCategory();
         if (recycleCategory != "") {
             check(ResultType.getResultType(recycleCategory));
         }
@@ -78,14 +77,17 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
         binding.btnChooseRecycleCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().setRecycleCategory(selectCategory.getMemo());
-                startActivity(new Intent(ChooseRecycleCategoryActivity.this, HomeActivity.class));
+                if(selectCategory != null && selectCategory != ResultType.UNKNOWN){
+                    LoginManager.getInstance().setRecycleCategory(selectCategory.getMemo());
+                    startActivity(new Intent(ChooseRecycleCategoryActivity.this, HomeActivity.class));
+                }
             }
         });
     }
 
     //0:無 1:寶特瓶 2:鐵鋁罐 3:電池 4:玻璃瓶
     private void check(ResultType category) {
+        selectCategory = category;
         switch (category) {
             case BOTTLE:
                 uncheckLinearLayout();

@@ -25,6 +25,7 @@ import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.firebase.functions.HttpsCallableResult;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.HashMap;
@@ -55,11 +56,19 @@ public class CreateUserActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(!Strings.isEmptyOrWhitespace(viewmodel.getAccount()) && !Strings.isEmptyOrWhitespace(viewmodel.getPassword()) && !Strings.isEmptyOrWhitespace(viewmodel.getNickName())){
-                    createUser(viewmodel.getAccount(), DigestUtils.sha256Hex(viewmodel.getPassword()), viewmodel.getNickName());
+                    createUser(viewmodel.getAccount(), viewmodel.getPassword(), viewmodel.getNickName());
                 }
 
             }
         });
+    }
+
+    private String encodeString(String plainText){
+        byte[] bin = plainText.getBytes();
+        //String hex = DigestUtils.sha256Hex(bin); こっちはランタイムエラーになる
+        byte[] sha256 = DigestUtils.sha256(bin);
+        char[] hexChars = Hex.encodeHex(sha256);
+        return new String(hexChars);
     }
 
     private void createUser(final String account, final String password, final String nickName){
@@ -102,7 +111,7 @@ public class CreateUserActivity extends BaseActivity {
                 Log.d(TAG, "login_background_layer_list:success\n"+task.getResult());
 //                AddUserListener addUserListener = new AddUserListener(FirebaseAuthManager.getInstance().getUid(), viewmodel.getPassword(), viewmodel.getNickName());
 //                FirebaseDatabaseManager.getInstance().addUser(addUserListener);
-                addUserToDatabase(password, nickName);
+                addUserToDatabase(encodeString(password), nickName);
             }else{
                 Log.d(TAG, "login_background_layer_list:failure\n"+ task.getException());
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateUserActivity.this);

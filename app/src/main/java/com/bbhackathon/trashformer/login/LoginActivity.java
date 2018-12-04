@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.chooseRecycleCategory.ChooseRecycleCategoryActivity;
 import com.bbhackathon.trashformer.createUser.CreateUserActivity;
 import com.bbhackathon.trashformer.databinding.ActivityLoginBinding;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -172,6 +174,7 @@ public class LoginActivity extends BaseActivity {
         if(user!=null){
             Toast.makeText(LoginActivity.this, "已登入",
                     Toast.LENGTH_SHORT).show();
+            startChooseRecycleItem();
         }
         else{
             Toast.makeText(LoginActivity.this, "未登入",

@@ -25,9 +25,9 @@
             android:paddingTop="24dp">
 
             <TextView
+                android:id="@+id/monsterName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:text="垃圾袋寶包"
                 android:textSize="30sp" />
 
@@ -38,7 +38,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/lebelTitle"
+                    android:id="@+id/labelTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="等級"
@@ -46,7 +46,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/monsterLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -137,6 +137,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/giftImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"

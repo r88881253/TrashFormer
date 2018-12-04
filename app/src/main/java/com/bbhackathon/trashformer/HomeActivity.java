@@ -18,25 +18,26 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.base.BaseActivity;
-import com.bbhackathon.trashformer.entity.CameraResultEntity;
-import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
-import com.bbhackathon.trashformer.login.BeforeLoginActivity;
-import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
+import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.entity.UserProfileEntity;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
+import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
+import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
 import com.bbhackathon.trashformer.setting.SettingActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
 import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel;
@@ -72,7 +73,17 @@ public class HomeActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+        initView();
+        initListner();
 
+        setStatusBar(R.color.btn_login_background_806EE6);
+    }
+
+    private void initView() {
+        FirebaseDatabaseManager.getInstance().selectUserProfileTable(FirebaseAuthManager.getInstance().getUid(), new SelectUserDataListener());
+    }
+
+    private void initListner() {
         mBinding.btnEquipment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,13 +118,12 @@ public class HomeActivity extends BaseActivity {
                 startActivity(i);
             }
         });
-
-        setStatusBar(R.color.btn_login_background_806EE6);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        initView();
 //        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(findViewById(R.id.homeProgressBar), "progressbar", 100, 40);
 //        progressAnimator.setDuration(3500);
 //        progressAnimator.setInterpolator(new LinearInterpolator());
@@ -139,6 +149,83 @@ public class HomeActivity extends BaseActivity {
             }
         }
 
+    }
+
+    class SelectUserDataListener implements ValueEventListener {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            UserProfileEntity userProfile = dataSnapshot.getValue(UserProfileEntity.class);
+            if (userProfile != null) {
+                Log.d(TAG, userProfile.toString());
+                if (userProfile.getMonsterName() != null) {
+                    mBinding.monsterName.setText(userProfile.getMonsterName());
+                }
+                if (userProfile.getLevel() != 0) {
+                    mBinding.monsterLevel.setText(String.valueOf(userProfile.getLevel()));
+                }
+                mBinding.homeProgressBar.setProgress(Integer.valueOf(userProfile.getExp()));
+
+                setHeartStatus(userProfile.getHeartStatus());
+
+                mBinding.giftNumber.setText(String.valueOf(userProfile.getLevelGiftCount()));
+                if (userProfile.getLevelGiftCount() != 0) {
+                    mBinding.giftImageView.setImageResource(R.drawable.gift_box_active);
+                } else {
+                    mBinding.giftImageView.setImageResource(R.drawable.gift_box);
+                }
+                //            if(userProfile.getMissionGiftCount() != null){mBinding.missionNumber.setText(userProfile.getMissionGiftCount()/);}
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Log.d(TAG, "The read failed: " + databaseError.getCode());
+        }
+    }
+
+    private void setHeartStatus(float heartCount) {
+        if (heartCount != 0) {
+            initHeartStatus();
+            if (heartCount >= 0.5) {
+                mBinding.heart1.setImageResource(R.drawable.heart_half);
+            }
+            if (heartCount >= 1) {
+                mBinding.heart1.setImageResource(R.drawable.heart);
+            }
+            if (heartCount >= 1.5) {
+                mBinding.heart2.setImageResource(R.drawable.heart_half);
+            }
+            if (heartCount >= 2) {
+                mBinding.heart2.setImageResource(R.drawable.heart);
+            }
+            if (heartCount >= 2.5) {
+                mBinding.heart3.setImageResource(R.drawable.heart_half);
+            }
+            if (heartCount >= 3) {
+                mBinding.heart3.setImageResource(R.drawable.heart);
+            }
+            if (heartCount >= 3.5) {
+                mBinding.heart4.setImageResource(R.drawable.heart_half);
+            }
+            if (heartCount >= 4) {
+                mBinding.heart4.setImageResource(R.drawable.heart);
+            }
+            if (heartCount >= 4.5) {
+                mBinding.heart5.setImageResource(R.drawable.heart_half);
+            }
+            if (heartCount >= 5) {
+                mBinding.heart5.setImageResource(R.drawable.heart);
+            }
+
+        }
+    }
+
+    private void initHeartStatus() {
+        mBinding.heart1.setImageResource(android.R.color.white);
+        mBinding.heart2.setImageResource(android.R.color.white);
+        mBinding.heart3.setImageResource(android.R.color.white);
+        mBinding.heart4.setImageResource(android.R.color.white);
+        mBinding.heart5.setImageResource(android.R.color.white);
     }
 
     private void cloudLabelDetectTask(Bitmap source) {
