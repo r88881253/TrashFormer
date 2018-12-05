@@ -4,7 +4,7 @@
 
     <!-- 要求使用者提供權限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- 要求相機，但不一定自動對焦 -->
@@ -59,7 +59,8 @@
         <activity android:name=".setting.SettingActivity" />
         <activity android:name=".leaderboard.LeaderBoardActivity" />
         <activity android:name=".chooseRecycleCategory.ChooseRecycleCategoryActivity" />
-        <activity android:name=".createUser.CreateUserActivity"></activity>
+        <activity android:name=".createUser.CreateUserActivity" />
+        <activity android:name=".camera.CameraActivity"></activity>
     </application>
 
 </manifest>
