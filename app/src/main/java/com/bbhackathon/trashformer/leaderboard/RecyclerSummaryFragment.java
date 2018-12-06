@@ -1,6 +1,6 @@
 package com.bbhackathon.trashformer.leaderboard;
 
-import android.graphics.Canvas;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,10 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.databinding.RecyclerSummaryFragmentBinding;
+import com.bbhackathon.trashformer.entity.RecycleItemPercentageEntity;
+import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.components.AxisBase;
@@ -25,9 +26,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.renderer.XAxisRenderer;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
@@ -36,13 +34,19 @@ import java.util.List;
 public class RecyclerSummaryFragment extends Fragment {
     private static String TAG = RecyclerSummaryFragment.class.getSimpleName();
 
-
+    private RecycleItemPercentageEntity recycleItemPercentageEntity;
     private BarChart barChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recycler_summary_fragment, container, false);
-        return rootView;
+
+        RecyclerSummaryFragmentBinding binding = DataBindingUtil.inflate(
+                inflater, R.layout.recycler_summary_fragment, container, false);
+        View view = binding.getRoot();
+        recycleItemPercentageEntity = new RecycleItemPercentageEntity();
+        //here data must be an instance of the class MarsDataProvider
+        binding.setRecycleItemCount(recycleItemPercentageEntity);
+        return view;
     }
 
     @Override
@@ -51,6 +55,10 @@ public class RecyclerSummaryFragment extends Fragment {
 
         initBarChart();
         initBarChartData();
+    }
+
+    public void setRecycleAmount(UserProfileTable userProfile){
+        recycleItemPercentageEntity.setRecyclePercentage(userProfile);
     }
 
     private void initBarChart() {
@@ -107,13 +115,13 @@ public class RecyclerSummaryFragment extends Fragment {
     private void initBarChartData(){
         //模拟数据
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        yVals1.add(new BarEntry(1.0f, 10));
-        yVals1.add(new BarEntry(2.0f, 20));
-        yVals1.add(new BarEntry(3.0f, 30));
-        yVals1.add(new BarEntry(4.0f, 40));
-        yVals1.add(new BarEntry(5.0f, 50));
-        yVals1.add(new BarEntry(6.0f, 50));
-        yVals1.add(new BarEntry(7.0f, 50));
+        yVals1.add(new BarEntry(1.0f, 30));
+        yVals1.add(new BarEntry(2.0f, 21));
+        yVals1.add(new BarEntry(3.0f, 52));
+        yVals1.add(new BarEntry(4.0f, 5));
+        yVals1.add(new BarEntry(5.0f, 5));
+        yVals1.add(new BarEntry(6.0f, 40));
+        yVals1.add(new BarEntry(7.0f, 30));
 
         BarDataSet set1;
         if (barChart.getData() != null &&
@@ -132,7 +140,7 @@ public class RecyclerSummaryFragment extends Fragment {
             ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
             dataSets.add(set1);
             BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
+            data.setValueTextSize(20f);
             data.setBarWidth(0.6f);
             data.setValueFormatter(new CallCountValueFormatter());
             data.setHighlightEnabled(false);
@@ -155,7 +163,7 @@ public class RecyclerSummaryFragment extends Fragment {
             Log.i(TAG, "mChart.getVisibleXRange()-------------" + mChart.getVisibleXRange());
 
             List<String[]> xAxisTextList = new ArrayList<>();
-            xAxisTextList.add(new String[]{"一", "二", "三", "四", "五", "六", "日"});
+            xAxisTextList.add(new String[]{"三", "四", "五", "六", "日", "一", "二"});
 
             if (value == 0.0 || value == 8.0) {
                 return "";

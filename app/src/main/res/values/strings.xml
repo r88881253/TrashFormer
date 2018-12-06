@@ -6,6 +6,8 @@
 
     <string name="create_account">建立帳號</string>
     <string name="login">登入</string>
+
+    <!--home page-->
     <string name="equipment">裝備</string>
     <string name="store">商店</string>
     <string name="report">報表</string>
@@ -13,6 +15,10 @@
     <string name="setting">設定</string>
     <string name="gift">禮物</string>
     <string name="mission">任務：</string>
+    <string name="input_password_to_setting">請輸入密碼以進入設定</string>
+    <string name="btn_password_confirm">確認密碼</string>
+    <string name="get_present">獲得 聖誕帽 啦！</string>
+    <string name="btn_get_confirm">確認領取</string>
 
     <!--分類-->
     <string name="aluminum_can">鐵鋁罐</string>

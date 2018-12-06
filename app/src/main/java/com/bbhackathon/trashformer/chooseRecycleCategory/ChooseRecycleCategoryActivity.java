@@ -10,6 +10,7 @@ import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.databinding.ActivityChooseRecycleCategoryBinding;
+import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
 import com.bbhackathon.trashformer.type.ResultType;
 
@@ -119,4 +120,9 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
         binding.selectGlassLinearLayout.setBackground(ContextCompat.getDrawable(getBaseContext(), R.drawable.dialog_default_shape));
     }
 
+    @Override
+    public void onBackPressed() {
+        FirebaseAuthManager.getInstance().logout();
+        super.onBackPressed();
+    }
 }

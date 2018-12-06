@@ -26,12 +26,12 @@ import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
-import com.bbhackathon.trashformer.entity.UserProfileEntity;
+import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
 import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
-import com.bbhackathon.trashformer.setting.SettingActivity;
+import com.bbhackathon.trashformer.setting.password.PasswordDialog;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -114,8 +114,8 @@ public class HomeActivity extends BaseActivity {
         mBinding.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, SettingActivity.class);
-                startActivity(i);
+                PasswordDialog dialog = new PasswordDialog();
+                dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
     }
@@ -154,7 +154,7 @@ public class HomeActivity extends BaseActivity {
     class SelectUserDataListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            UserProfileEntity userProfile = dataSnapshot.getValue(UserProfileEntity.class);
+            UserProfileTable userProfile = dataSnapshot.getValue(UserProfileTable.class);
             if (userProfile != null) {
                 Log.d(TAG, userProfile.toString());
                 if (userProfile.getMonsterName() != null) {
@@ -184,8 +184,8 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void setHeartStatus(float heartCount) {
+        initHeartStatus();
         if (heartCount != 0) {
-            initHeartStatus();
             if (heartCount >= 0.5) {
                 mBinding.heart1.setImageResource(R.drawable.heart_half);
             }

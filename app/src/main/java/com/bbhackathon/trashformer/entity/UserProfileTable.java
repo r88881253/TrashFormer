@@ -1,6 +1,6 @@
 package com.bbhackathon.trashformer.entity;
 
-public class UserProfileEntity {
+public class UserProfileTable {
     private String email;
     private String pwd;
     private String nickName;
@@ -16,11 +16,11 @@ public class UserProfileEntity {
     private int levelGiftCount;
     private int missionGiftCount;
 
-    public UserProfileEntity() {
+    public UserProfileTable() {
     }
 
-    public UserProfileEntity(String email, String pwd, String nickName, int batteryRecycleCount, int bottleRecycleCount, int canRecycleCount, int glassRecycleCount,
-                             int othersRecycleCount, String monsterName, int level, int exp, float heartStatus, int levelGiftCount, int missionGiftCount) {
+    public UserProfileTable(String email, String pwd, String nickName, int batteryRecycleCount, int bottleRecycleCount, int canRecycleCount, int glassRecycleCount,
+                       int othersRecycleCount, String monsterName, int level, int exp, float heartStatus, int levelGiftCount, int missionGiftCount) {
         this.email = email;
         this.pwd = pwd;
         this.nickName = nickName;

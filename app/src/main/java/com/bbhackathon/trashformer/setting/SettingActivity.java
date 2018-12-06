@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.databinding.ActivitySettingBinding;
-import com.bbhackathon.trashformer.entity.UserProfileEntity;
+import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
@@ -37,14 +34,6 @@ public class SettingActivity extends BaseActivity {
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
 
-        ((Button) findViewById(R.id.btnLogout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LogoutDialog dialog = new LogoutDialog();
-                dialog.show(getSupportFragmentManager(), "dialog");
-            }
-        });
-
         initView();
         initListener();
         hideKeyboard();
@@ -60,6 +49,14 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initListener() {
+        mBinding.dialogSetting.btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LogoutDialog dialog = new LogoutDialog();
+                dialog.show(getSupportFragmentManager(), "dialog");
+            }
+        });
+
 //
 //        mBinding.dialogSetting.btnBottle.setOnCheckedChangeListener(new CheckListener());
 //        mBinding.dialogSetting.btnCan.setOnCheckedChangeListener(new CheckListener());
@@ -74,19 +71,19 @@ public class SettingActivity extends BaseActivity {
                 switch (checkedId)
                 {
                     case R.id.btnBottle: //case mRadioButton0.getId():
-
+                        LoginManager.getInstance().setRecycleCategory(ResultType.BOTTLE.getMemo());
                         break;
 
                     case R.id.btnCan: //case mRadioButton1.getId():
-
+                        LoginManager.getInstance().setRecycleCategory(ResultType.CAN.getMemo());
                         break;
 
                     case R.id.btnBattery: //case mRadioButton2.getId():
-
+                        LoginManager.getInstance().setRecycleCategory(ResultType.BATTERY.getMemo());
                         break;
 
                     case R.id.btnGlass: //case mRadioButton3.getId():
-
+                        LoginManager.getInstance().setRecycleCategory(ResultType.GLASS.getMemo());
                         break;
                 }
             }
@@ -145,7 +142,7 @@ public class SettingActivity extends BaseActivity {
     class SelectUserDataListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            UserProfileEntity userProfile = dataSnapshot.getValue(UserProfileEntity.class);
+            UserProfileTable userProfile = dataSnapshot.getValue(UserProfileTable.class);
             if (userProfile != null) {
                 Log.d(TAG, userProfile.toString());
                 if (userProfile.getNickName() != null) {

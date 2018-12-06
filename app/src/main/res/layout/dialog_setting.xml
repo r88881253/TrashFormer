@@ -33,7 +33,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/password_layout"
+            android:id="@+id/nickName_layout"
             android:layout_width="570dp"
             android:layout_height="80dp"
             android:layout_below="@id/iconSettingLinearLayout"
@@ -65,8 +65,8 @@
             android:id="@+id/selectItemTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/password_layout"
-            android:layout_alignLeft="@id/password_layout"
+            android:layout_below="@id/nickName_layout"
+            android:layout_alignLeft="@id/nickName_layout"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="24dp"
             android:text="@string/select_recycle_item"
@@ -78,8 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/selectItemTextView"
-            android:layout_alignLeft="@id/password_layout"
-            android:layout_alignRight="@id/password_layout"
+            android:layout_alignLeft="@id/nickName_layout"
+            android:layout_alignRight="@id/nickName_layout"
             android:checkedButton="1"
             android:orientation="horizontal">
 
