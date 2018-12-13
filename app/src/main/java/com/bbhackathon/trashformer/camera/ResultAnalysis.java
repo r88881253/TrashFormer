@@ -4,11 +4,10 @@ import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.type.ResultType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.xml.transform.Result;
 
 public class ResultAnalysis {
 
@@ -49,19 +48,30 @@ public class ResultAnalysis {
                 ResultType analysisResult = getResultType(keyword);
 
                 // 判斷結果
-                result = getCompareResult(result, confident, analysisResult, entity.getConfidence());
-
+                if(isHigherConfidenceResult(result, confident, analysisResult, entity.getConfidence())){
+                    result = analysisResult;
+                    confident = entity.getConfidence();
+                }
+//                result = getCompareResult(result, confident, analysisResult, entity.getConfidence());
             }
         }
 
         return result;
     }
 
-
+    // 依照信心指數排列(高至低)
     private void orderByConfience(ArrayList<CameraResultEntity> entityList){
 
-        // 依照信心指數排列(高至低)
-
+        // Sorting
+        Collections.sort(entityList, new Comparator<CameraResultEntity>() {
+            @Override
+            public int compare(CameraResultEntity cameraResultEntity1, CameraResultEntity cameraResultEntity2) {
+                Float entity1Confidence = cameraResultEntity1.getConfidence();
+                Float entity2Confidence = cameraResultEntity2.getConfidence();
+                // 降序排序
+                return entity2Confidence.compareTo(entity1Confidence);
+            }
+        });
     }
 
     private ResultType getResultType(String keyword){
@@ -89,6 +99,21 @@ public class ResultAnalysis {
         }
 
         return result;
+    }
+
+    private boolean isHigherConfidenceResult(ResultType result, float confident, ResultType analysisResult, float analysisConfident){
+        // 若不為未知才要判斷
+        if(analysisResult != ResultType.UNKNOWN){
+            // 判斷信心指數是否比較高，較高則回true，要取代
+            if(confident >= analysisConfident){
+                return false;
+            } else {
+                return true;
+            }
+         //未知直接回false
+        } else{
+            return false;
+        }
     }
 
     private ResultType getCompareResult(ResultType result, float confident, ResultType analysisResult, float analysisConfident){
