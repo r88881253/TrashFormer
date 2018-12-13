@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#f04a4a</color>
     <color name="yellow_transparent_forebackground_F6C946">#59f6c946</color>
     <color name="yellow_background_F6C946">#f6c946</color>
     <color name="white">#ffffff</color>
@@ -13,6 +14,7 @@
 
     <!--leaderboard-->
     <color name="leaderboard_background_F04848">#f04848</color>
+    <color name="leaderboard_nickname_gray_909090">#909090</color>
 
     <!--progress bar-->
     <color name="progress_bar_progress_start_F04A4A">#f04a4a</color>

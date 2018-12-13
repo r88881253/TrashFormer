@@ -9,13 +9,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bbhackathon.trashformer.HomeActivity;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.chooseRecycleCategory.ChooseRecycleCategoryActivity;
 import com.bbhackathon.trashformer.createUser.CreateUserActivity;
 import com.bbhackathon.trashformer.databinding.ActivityLoginBinding;
-import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -63,11 +62,11 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    public void initView(){
+    public void initView() {
 //        account = viewmodel.getAccount().get();
 //        passowrd = viewmodel.getPassword().get();
 
-        binding.btnCreateAccount.setOnClickListener(new View.OnClickListener(){
+        binding.btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, CreateUserActivity.class));
@@ -81,28 +80,34 @@ public class LoginActivity extends BaseActivity {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signInWithEmailAndPassword(viewmodel.getAccount().get(), viewmodel.getPassword().get())
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
+                if(viewmodel.getAccount() != null && viewmodel.getPassword() != null &&
+                        !Strings.isEmptyOrWhitespace(viewmodel.getAccount().get()) &&
+                        !Strings.isEmptyOrWhitespace(viewmodel.getPassword().get())) {
+                    showProgressDialog();
+                    mAuth.signInWithEmailAndPassword(viewmodel.getAccount().get(), viewmodel.getPassword().get())
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "signInWithEmail:success");
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        updateUI(user);
 
-                                    startChooseRecycleItem();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
+                                        startChooseRecycleItem();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                        updateUI(null);
+                                        dismissProgressDialog();
+                                    }
                                 }
-
-                                // ...
-                            }
-                        });
+                            });
+                } else {
+                    showAlertDialog("帳號密碼不得為空");
+                }
             }
         });
     }
@@ -132,7 +137,8 @@ public class LoginActivity extends BaseActivity {
 //                });
 //    }
 
-    private void startChooseRecycleItem(){
+    private void startChooseRecycleItem() {
+        dismissProgressDialog();
         Intent i = new Intent(this, ChooseRecycleCategoryActivity.class);
         startActivity(i);
     }
@@ -170,13 +176,12 @@ public class LoginActivity extends BaseActivity {
 //                });
 //    }
 
-    private void updateUI(FirebaseUser user){
-        if(user!=null){
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
             Toast.makeText(LoginActivity.this, "已登入",
                     Toast.LENGTH_SHORT).show();
             startChooseRecycleItem();
-        }
-        else{
+        } else {
             Toast.makeText(LoginActivity.this, "未登入",
                     Toast.LENGTH_SHORT).show();
         }

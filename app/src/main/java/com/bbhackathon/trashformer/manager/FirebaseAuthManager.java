@@ -16,44 +16,43 @@ public class FirebaseAuthManager {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static FirebaseAuthManager mFirebaseAuthManager;
 
-    private FirebaseAuthManager(){
+    private FirebaseAuthManager() {
     }
 
-    public static FirebaseAuthManager getInstance(){
-        if(mFirebaseAuthManager == null){
+    public static FirebaseAuthManager getInstance() {
+        if (mFirebaseAuthManager == null) {
             mFirebaseAuthManager = new FirebaseAuthManager();
         }
         return mFirebaseAuthManager;
     }
 
-    public void login(String email, String password, OnCompleteListener<AuthResult> onCompleteListener){
+    public void login(String email, String password, OnCompleteListener<AuthResult> onCompleteListener) {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(onCompleteListener);
     }
 
-    public FirebaseUser getUser(){
+    public FirebaseUser getUser() {
         return mAuth.getCurrentUser();
     }
 
-    public String getUid(){
-        if(getUser() == null){
+    public String getUid() {
+        if (getUser() == null) {
             return "9999";
-        }
-        else {
+        } else {
             return getUser().getUid();
         }
     }
 
-    public void logout(){
+    public void logout() {
         mAuth.getInstance().signOut();
     }
 
-    public void createUser(String account, String password, OnCompleteListener<AuthResult> onCompleteListener){
+    public void createUser(String account, String password, OnCompleteListener<AuthResult> onCompleteListener) {
         mAuth.createUserWithEmailAndPassword(account, password)
                 .addOnCompleteListener(onCompleteListener);
     }
 
-    public void createUser(String account, String password, Activity activity, final FirebaseAuthCallback callback){
+    public void createUser(String account, String password, Activity activity, final FirebaseAuthCallback callback) {
         mAuth.createUserWithEmailAndPassword(account, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override

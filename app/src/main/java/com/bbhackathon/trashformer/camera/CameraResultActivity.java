@@ -1,16 +1,14 @@
 package com.bbhackathon.trashformer.camera;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.type.ResultType;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.bbhackathon.trashformer.util.ExtraKey.INTENT_CAMERA_RESULT;
 

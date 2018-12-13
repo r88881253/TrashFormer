@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     android:background="@drawable/dialog_default_shape"
     android:orientation="vertical"
-    android:paddingBottom="84dp"
-    android:paddingTop="64dp">
+    android:layout_marginLeft="100dp"
+    android:layout_marginRight="100dp"
+    android:paddingBottom="40dp"
+    android:paddingTop="40dp">
 
     <TextView
+        android:id="@+id/getPresentTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -15,26 +18,34 @@
         android:textColor="@color/inputText_4D555B"
         android:textSize="30dp" />
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
+        android:layout_marginTop="-30dp"
+        android:layout_marginBottom="-30dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/gift_box" />
+            android:layout_centerVertical="true"
+            android:paddingBottom="100dp"
+            android:elevation="1dp"
+            android:src="@drawable/avartar_head_xmas_hat" />
+
+        <ImageView
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/gift_box_open_background" />
 
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnPasswordConfirm"
+        android:id="@+id/btnReceivePresent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
         android:background="@drawable/btn_login_shape"
         android:paddingLeft="80dp"
         android:paddingRight="80dp"

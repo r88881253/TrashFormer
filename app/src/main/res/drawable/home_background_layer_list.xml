@@ -12,8 +12,8 @@
 
     <item
         android:drawable="@drawable/avatar_base"
-        android:top="700dp"
-        android:bottom="42dp">
+        android:top="580dp"
+        android:bottom="60dp">
         <bitmap android:src="@drawable/avatar_base" />
         <!--<item android:top="22.5dp" android:bottom="17.5dp" android:drawable="@drawable/login">-->
 

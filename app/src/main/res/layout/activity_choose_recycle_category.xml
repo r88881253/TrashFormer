@@ -12,12 +12,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_margin="110dp"
+            android:layout_marginBottom="90dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
             android:background="@drawable/dialog_default_shape"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="80dp"
-            android:paddingBottom="80dp">
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,8 +31,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="80dp"
-                    android:paddingRight="80dp">
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp">
 
                     <LinearLayout
                         android:id="@+id/select_bottle_linearLayout"
@@ -38,9 +41,9 @@
                         android:background="@drawable/dialog_selector"
                         android:clickable="true"
                         android:orientation="horizontal"
-                        android:paddingTop="20dp"
+                        android:paddingTop="10dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="20dp">
+                        android:paddingBottom="10dp">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -72,9 +75,9 @@
                         android:background="@drawable/dialog_selector"
                         android:clickable="true"
                         android:orientation="horizontal"
-                        android:paddingTop="20dp"
+                        android:paddingTop="10dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="20dp">
+                        android:paddingBottom="10dp">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -101,8 +104,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="80dp"
-                    android:paddingRight="80dp">
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp">
 
                     <LinearLayout
                         android:id="@+id/select_battery_linearLayout"
@@ -111,9 +114,9 @@
                         android:background="@drawable/dialog_selector"
                         android:clickable="true"
                         android:orientation="horizontal"
-                        android:paddingTop="20dp"
+                        android:paddingTop="10dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="20dp">
+                        android:paddingBottom="10dp">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -145,9 +148,9 @@
                         android:background="@drawable/dialog_selector"
                         android:clickable="true"
                         android:orientation="horizontal"
-                        android:paddingTop="20dp"
+                        android:paddingTop="10dp"
                         android:paddingRight="20dp"
-                        android:paddingBottom="20dp">
+                        android:paddingBottom="10dp">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -172,7 +175,7 @@
                 android:id="@+id/btnChooseRecycleCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/btn_login_shape"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"

@@ -1,55 +1,59 @@
 package com.bbhackathon.trashformer;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.base.BaseActivity;
+import com.bbhackathon.trashformer.camera.CameraActivity;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.entity.UserMissionEntity;
 import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
 import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
+import com.bbhackathon.trashformer.present.PresentDialog;
 import com.bbhackathon.trashformer.setting.password.PasswordDialog;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
 import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel;
 import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabelDetector;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionLabel;
-import com.google.firebase.ml.vision.label.FirebaseVisionLabelDetector;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.bbhackathon.trashformer.util.ExtraKey.INTENT_CAMERA_RESULT;
 
@@ -73,6 +77,9 @@ public class HomeActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+        hideKeyboard();
+        mBinding.homeRelativeLayout.setVisibility(View.INVISIBLE);
+        showProgressDialog();
         initView();
         initListner();
 
@@ -81,6 +88,7 @@ public class HomeActivity extends BaseActivity {
 
     private void initView() {
         FirebaseDatabaseManager.getInstance().selectUserProfileTable(FirebaseAuthManager.getInstance().getUid(), new SelectUserDataListener());
+        FirebaseDatabaseManager.getInstance().selectMissionTable(FirebaseAuthManager.getInstance().getUid(), new SelectMissionDataListener());
     }
 
     private void initListner() {
@@ -118,6 +126,40 @@ public class HomeActivity extends BaseActivity {
                 dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
+
+        mBinding.mosterNameEditPen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mBinding.monsterName.isEnabled()){
+                    mBinding.monsterName.setEnabled(false);
+                    updateMonsterName(mBinding.monsterName.getText().toString());
+                } else {
+                    mBinding.monsterName.setEnabled(true);
+                }
+            }
+        });
+
+        mBinding.missionImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.missionImageView.setClickable(false);
+                openMissionGift();
+                PresentDialog dialog = new PresentDialog();
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "dialog");
+            }
+        });
+
+        mBinding.giftImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.giftImageView.setClickable(false);
+                reduceGift();
+                PresentDialog dialog = new PresentDialog();
+                dialog.setCancelable(false);
+                dialog.show(getSupportFragmentManager(), "dialog");
+            }
+        });
     }
 
     @Override
@@ -130,26 +172,6 @@ public class HomeActivity extends BaseActivity {
 //        progressAnimator.start();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == REQUEST_TAKE_PHOTO) {
-            if (resultCode == RESULT_OK) {
-
-//                取得小尺寸照片
-//                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
-
-//                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(getBitmapFromUri(Uri.parse(mCurrentPhotoPath)));
-                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can2);
-                cloudLabelDetectTask(source);
-//                visionLabelDetectTask(source);
-            }
-        }
-
-    }
 
     class SelectUserDataListener implements ValueEventListener {
         @Override
@@ -170,16 +192,53 @@ public class HomeActivity extends BaseActivity {
                 mBinding.giftNumber.setText(String.valueOf(userProfile.getLevelGiftCount()));
                 if (userProfile.getLevelGiftCount() != 0) {
                     mBinding.giftImageView.setImageResource(R.drawable.gift_box_active);
+                    mBinding.giftImageView.setClickable(true);
                 } else {
                     mBinding.giftImageView.setImageResource(R.drawable.gift_box);
+                    mBinding.giftImageView.setClickable(false);
                 }
+
+
                 //            if(userProfile.getMissionGiftCount() != null){mBinding.missionNumber.setText(userProfile.getMissionGiftCount()/);}
             }
+            mBinding.homeRelativeLayout.setVisibility(View.VISIBLE);
+            dismissProgressDialog();
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
             Log.d(TAG, "The read failed: " + databaseError.getCode());
+            mBinding.homeRelativeLayout.setVisibility(View.VISIBLE);
+            dismissProgressDialog();
+        }
+    }
+
+    class SelectMissionDataListener implements ValueEventListener {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            UserMissionEntity userMissionEntity = dataSnapshot.getValue(UserMissionEntity.class);
+            if (userMissionEntity != null) {
+                Log.d(TAG, userMissionEntity.toString());
+
+                if (userMissionEntity.getRecycleType() != null) {
+                    mBinding.missionType.setText(userMissionEntity.getRecycleType());
+                }
+
+                mBinding.missionCount.setText(userMissionEntity.getRecycleCount() + "/" + userMissionEntity.getRecycleAmt());
+                if (userMissionEntity.getRecycleCount() >= userMissionEntity.getRecycleAmt()) {
+                    mBinding.missionImageView.setImageResource(R.drawable.scroll_active);
+                    mBinding.missionImageView.setClickable(true);
+                } else {
+                    mBinding.missionImageView.setImageResource(R.drawable.scroll);
+                    mBinding.missionImageView.setClickable(false);
+                }
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
         }
     }
 
@@ -287,18 +346,6 @@ public class HomeActivity extends BaseActivity {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) {
-        try {
-            // 读取uri所在的图片
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            return bitmap;
-        } catch (Exception e) {
-            Log.e("[Android]", e.getMessage());
-            Log.e("[Android]", "目录为：" + uri);
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -313,8 +360,11 @@ public class HomeActivity extends BaseActivity {
                         REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
             } else {
 //                takePhoto();
-                doTakePhoto();
+//                doTakePhoto();
+                startActivity(new Intent(HomeActivity.this, CameraActivity.class));
             }
+        } else {
+            startActivity(new Intent(HomeActivity.this, CameraActivity.class));
         }
 
     }
@@ -336,7 +386,8 @@ public class HomeActivity extends BaseActivity {
                     //do something
                     Toast.makeText(this, "已經拿到CAMERA權限囉!", Toast.LENGTH_SHORT).show();
 //                    takePhoto();
-                    doTakePhoto();
+//                    doTakePhoto();
+                    startActivity(new Intent(HomeActivity.this, CameraActivity.class));
                 }
                 //假如拒絕了
                 else {
@@ -349,7 +400,8 @@ public class HomeActivity extends BaseActivity {
                     //do something
                     Toast.makeText(this, "已經拿到STORAGE權限囉!", Toast.LENGTH_SHORT).show();
 //                    takePhoto();
-                    doTakePhoto();
+//                    doTakePhoto();
+                    startActivity(new Intent(HomeActivity.this, CameraActivity.class));
                 }
                 //假如拒絕了
                 else {
@@ -362,49 +414,162 @@ public class HomeActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    //拍照，小尺寸
-    private void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String f = System.currentTimeMillis() + ".jpg";
-        Uri fileUri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory("").getPath() + f));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); //指定圖片存放位置，指定後，在onActivityResult裏得到的Data將為null
-        startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+    private void updateMonsterName(String monsterName) {
+        updateMonsterNameTask(monsterName)
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("updateMonsterNameTask: ", "failed");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                            builder.setTitle(getString(R.string.app_name))
+                                    .setMessage(getString(R.string.something_failed))
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        } else {
+                            Log.d("updateMonsterNameTask: ", "successed");
+                        }
+                    }
+                });
 
     }
 
+    private Task<String> updateMonsterNameTask(String monsterName) {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
 
-    /**
-     * 拍照新方法[全尺寸]
-     */
-    private void doTakePhoto() {
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePhotoIntent.resolveActivity(getPackageManager()) != null) {
-            File newFile = createTakePhotoFile();
-            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", newFile);
-            Log.i(TAG, "contentUri = " + contentUri.toString());
-            List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(takePhotoIntent, PackageManager.MATCH_DEFAULT_ONLY);
-            for (ResolveInfo resolveInfo : resInfoList) {
-                String packageName = resolveInfo.activityInfo.packageName;
-                grantUriPermission(packageName, contentUri,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            }
-            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-            startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-        }
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+        data.put("monsterName", monsterName);
+
+        return mFunctions
+                .getHttpsCallable("updateMonsterName")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
     }
 
-    /**
-     * @return 拍照之後儲存的檔案
-     */
-    @NonNull
-    private File createTakePhotoFile() {
-        File imagePath = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "take_photo");
-        if (!imagePath.exists()) {
-            imagePath.mkdirs();
-        }
-        File file = new File(imagePath, "default_image.jpg");
-        mCurrentPhotoPath = file.getPath();// 儲存拍照的路徑
-        return file;
+
+    private void openMissionGift() {
+        openMissionGiftTask()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("openMissionGiftTask: ", "failed");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                            builder.setTitle(getString(R.string.app_name))
+                                    .setMessage(getString(R.string.something_failed))
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        } else {
+                            Log.d("openMissionGiftTask: ", "successed");
+                        }
+                    }
+                });
+
+    }
+
+    private Task<String> openMissionGiftTask() {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
+
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+
+        return mFunctions
+                .getHttpsCallable("openMissionGift")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
+    }
+
+    private void reduceGift() {
+        reduceGiftTask()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("reduceGiftTask: ", "failed");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                            builder.setTitle(getString(R.string.app_name))
+                                    .setMessage(getString(R.string.something_failed))
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        } else {
+                            Log.d("reduceGiftTask: ", "successed");
+                        }
+                    }
+                });
+
+    }
+
+    private Task<String> reduceGiftTask() {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
+
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+
+        return mFunctions
+                .getHttpsCallable("reduceGift")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
     }
 
     /**
@@ -461,37 +626,8 @@ public class HomeActivity extends BaseActivity {
         return returnBm;
     }
 
-    private void visionLabelDetectTask(Bitmap source) {
-        FirebaseVisionLabelDetector detector = FirebaseVision.getInstance().getVisionLabelDetector();
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
-
-//         Or, to set the minimum confidence required:
-//         FirebaseVisionLabelDetectorOptions options = new FirebaseVisionLabelDetectorOptions.Builder()
-//                                .setConfidenceThreshold(0.8f)
-//                                .build();
-//        FirebaseVisionLabelDetector detector = FirebaseVision.getInstance()
-//                .getVisionLabelDetector(options);
-
-        Task<List<FirebaseVisionLabel>> result = detector.detectInImage(image)
-                .addOnSuccessListener(
-                        new OnSuccessListener<List<FirebaseVisionLabel>>() {
-                            @Override
-                            public void onSuccess(List<FirebaseVisionLabel> labels) {
-
-                                Intent intent = new Intent(HomeActivity.this, CameraResultActivity.class);
-                                intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getVisionCameraResult(labels));
-                                startActivity(intent);
-                                // Task completed successfully
-                                // ...
-                            }
-                        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Task failed with an exception
-                                // ...
-                            }
-                        });
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 }

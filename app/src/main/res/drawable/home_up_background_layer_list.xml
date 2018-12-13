@@ -13,8 +13,8 @@
 
     <item
         android:drawable="@drawable/avatar_base"
-        android:top="300dp"
-        android:bottom="450dp">
+        android:top="250dp"
+        android:bottom="400dp">
         <!--<item android:top="22.5dp" android:bottom="17.5dp" android:drawable="@drawable/login">-->
 
     </item>

@@ -79,7 +79,7 @@ public class CreateUserDialog extends DialogFragment{
                             Log.d(TAG, "createUserWithEmail:failure\n"+ task.getException());
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle(getString(R.string.app_name))
-                                    .setMessage(getString(R.string.add_user_to_database_failed))
+                                    .setMessage(getString(R.string.something_failed))
                                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -123,7 +123,7 @@ public class CreateUserDialog extends DialogFragment{
                             Log.d("addUserToDatabaseTask: ","failed");
                             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                             builder.setTitle(getString(R.string.app_name))
-                                    .setMessage(getString(R.string.add_user_to_database_failed))
+                                    .setMessage(getString(R.string.something_failed))
                                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

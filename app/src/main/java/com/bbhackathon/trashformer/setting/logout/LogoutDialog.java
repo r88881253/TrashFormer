@@ -14,6 +14,7 @@ import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.login.BeforeLoginActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
+import com.bbhackathon.trashformer.setting.SettingActivity;
 
 public class LogoutDialog extends DialogFragment {
 
@@ -25,17 +26,22 @@ public class LogoutDialog extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        View view =  inflater.inflate(R.layout.dialog_logout, null);
+        View view = inflater.inflate(R.layout.dialog_logout, null);
 
         Button btnLogout = (Button) view.findViewById(R.id.btnLogoutConfirm);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((SettingActivity) getActivity()).showProgressDialog();
                 FirebaseAuthManager.getInstance().logout();
                 Toast.makeText(getContext(), "登出", Toast.LENGTH_SHORT).show();
-                LoginManager.getInstance().clearRecycleCategory();
+                LoginManager.getInstance(getActivity()).clearRecycleCategory();
+
+                ((SettingActivity) getActivity()).dismissProgressDialog();
+
                 Intent i = new Intent(getActivity(), BeforeLoginActivity.class);
                 startActivity(i);
+
             }
         });
 

@@ -1,11 +1,11 @@
 package com.bbhackathon.trashformer.camera;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,15 +14,34 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bbhackathon.trashformer.BuildConfig;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
+import com.bbhackathon.trashformer.type.ResultType;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableResult;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
 import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabel;
@@ -30,10 +49,14 @@ import com.google.firebase.ml.vision.cloud.label.FirebaseVisionCloudLabelDetecto
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import static com.bbhackathon.trashformer.util.ExtraKey.INTENT_CAMERA_RESULT;
+import java.util.Map;
+import java.util.Random;
 
 public class CameraActivity extends BaseActivity {
 
@@ -51,6 +74,25 @@ public class CameraActivity extends BaseActivity {
         setContentView(R.layout.activity_camera);
 
         setStatusBar(R.color.leaderboard_background_F04848);
+        ((RelativeLayout) findViewById(R.id.cameraRelativeLayout)).setVisibility(View.INVISIBLE);
+        initListener();
+        dispatchTakePictureIntent();
+    }
+
+    private void initListener() {
+        ((Button) findViewById(R.id.btnKeepRecognize)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+
+        ((Button) findViewById(R.id.btnBackHome)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -58,18 +100,108 @@ public class CameraActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
+                showProgressDialog();
+                showPic();
+                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(getBitmapFromUri());
+//                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can2);
+//                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
+                cloudLabelDetectTask(image);
+                FirebaseDatabaseManager.getInstance().selectTipsTable(new selectTipsTableListener());
+            } else {
+                onBackPressed();
+            }
+        }
+    }
 
-//                取得小尺寸照片
-//                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/image.jpg");
+    class selectTipsTableListener implements ValueEventListener {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            List<String> tipsTableList = (ArrayList<String>) dataSnapshot.getValue();
+            Log.d(TAG, tipsTableList.toString());
 
-//                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(getBitmapFromUri(Uri.parse(mCurrentPhotoPath)));
-                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can2);
-                cloudLabelDetectTask(source);
+            int randomInt = new Random().nextInt(tipsTableList.size());
+
+            if (tipsTableList.get(randomInt) != null) {
+                ((TextView) findViewById(R.id.camera_result_tips)).setText(tipsTableList.get(randomInt));
             }
         }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
     }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        ((RelativeLayout) findViewById(R.id.cameraRelativeLayout)).setVisibility(View.INVISIBLE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri() {
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        try {
+            // 读取uri所在的图片
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentUri);
+            return bitmap;
+        } catch (Exception e) {
+            Log.e("[Android]", e.getMessage());
+            Log.e("[Android]", "目录为：" + contentUri);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void showPic() {
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+
+        Bitmap bitmap = null;
+        try {
+            // 读取uri所在的图片
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentUri);
+            ((ImageView) findViewById(R.id.testImg)).setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.e("[Android]", e.getMessage());
+            Log.e("[Android]", "目录为：" + contentUri);
+            e.printStackTrace();
+        }
+    }
+
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
@@ -81,7 +213,6 @@ public class CameraActivity extends BaseActivity {
         }
         return true;
     }
-
 
 
     private void requestPermission() {
@@ -180,8 +311,7 @@ public class CameraActivity extends BaseActivity {
         return file;
     }
 
-    private void cloudLabelDetectTask(Bitmap source) {
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
+    private void cloudLabelDetectTask(FirebaseVisionImage image) {
         FirebaseVisionCloudDetectorOptions options =
                 new FirebaseVisionCloudDetectorOptions.Builder()
                         .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
@@ -197,9 +327,32 @@ public class CameraActivity extends BaseActivity {
                                 new OnSuccessListener<List<FirebaseVisionCloudLabel>>() {
                                     @Override
                                     public void onSuccess(List<FirebaseVisionCloudLabel> labels) {
-                                        Intent intent = new Intent(CameraActivity.this, CameraResultActivity.class);
-                                        intent.putParcelableArrayListExtra(INTENT_CAMERA_RESULT, (ArrayList) getCloudCameraResult(labels));
-                                        startActivity(intent);
+
+                                        ResultType resultType = new ResultAnalysis().doAnalysis((ArrayList) getCloudCameraResult(labels));
+
+                                        SpannableString span = new SpannableString(getString(R.string.camera_result_success_string) + resultType.getMemo() + "！");
+                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.inputText_4D555B)), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.btn_login_background_806EE6)), 5, span.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.inputText_4D555B)), span.length(), span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        ((TextView) findViewById(R.id.camera_result_type)).setText(span);
+
+                                        updateExp(0, resultType.getMemo());
+
+                                        ((RelativeLayout) findViewById(R.id.cameraRelativeLayout)).setVisibility(View.VISIBLE);
+
+                                        String cameraResult = "Result : " + resultType.getMemo() + "\n";
+
+                                        for(CameraResultEntity entity: (ArrayList<CameraResultEntity>) getCloudCameraResult(labels)){
+                                            String text = entity.getText();
+                                            float confident = entity.getConfidence();
+
+                                            String result = "text:" + text +"\t\t\t" + "confident:" + confident + "\n";
+                                            cameraResult = cameraResult + result;
+                                        }
+
+
+                                        ((TextView) findViewById(R.id.testTextview)).setText(cameraResult);
+                                        dismissProgressDialog();
                                     }
                                 })
                         .addOnFailureListener(
@@ -208,6 +361,7 @@ public class CameraActivity extends BaseActivity {
                                     public void onFailure(@NonNull Exception e) {
                                         // Task failed with an exception
                                         Log.d(TAG, "cloudLabelDetectTask failed");
+                                        dismissProgressDialog();
                                     }
                                 });
 
@@ -221,5 +375,59 @@ public class CameraActivity extends BaseActivity {
         }
 
         return entity;
+    }
+
+    private void updateExp(int exp, String recycleItem) {
+        updateExpToDatabaseTask(exp, recycleItem)
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("updateExpTask: ", "failed");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this);
+                            builder.setTitle(getString(R.string.app_name))
+                                    .setMessage(getString(R.string.something_failed))
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        } else {
+                            Log.d("updateExpTask: ", "successed");
+                        }
+                    }
+                });
+
+    }
+
+    private Task<String> updateExpToDatabaseTask(int exp, String recycleItem) {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
+
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+        data.put("exp", 40);
+        data.put("recycleItem", recycleItem);
+
+        return mFunctions
+                .getHttpsCallable("updateExp")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
     }
 }

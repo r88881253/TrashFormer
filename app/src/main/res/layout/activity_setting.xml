@@ -12,14 +12,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/avatar_head"
-                android:layout_width="280dp"
-                android:layout_height="250dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="-80dp"
                 android:elevation="1dp"
                 android:src="@drawable/avartar_head_xmas_hat" />
 
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/avatar_body_layout"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="-55dp"
+                android:layout_marginTop="-20dp"
                 android:src="@drawable/avatar_feet_normal" />
 
         </RelativeLayout>
@@ -71,11 +71,11 @@
         <include
             android:id="@+id/dialog_setting"
             layout="@layout/dialog_setting"
-            android:layout_width="680dp"
-            android:layout_height="670dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp" />
+            android:layout_marginBottom="20dp" />
 
     </RelativeLayout>
 

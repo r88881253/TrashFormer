@@ -41,7 +41,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initView() {
-        String recycleCategory = LoginManager.getInstance().getRecycleCategory();
+        String recycleCategory = LoginManager.getInstance(SettingActivity.this).getRecycleCategory();
         if (recycleCategory != "") {
             check(ResultType.getResultType(recycleCategory));
         }
@@ -63,27 +63,24 @@ public class SettingActivity extends BaseActivity {
 //        mBinding.dialogSetting.btnBattery.setOnCheckedChangeListener(new CheckListener());
 //        mBinding.dialogSetting.btnGlass.setOnCheckedChangeListener(new CheckListener());
 
-        mBinding.dialogSetting.recyclerItemLinearLayout.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        mBinding.dialogSetting.recyclerItemLinearLayout.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                switch (checkedId)
-                {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
                     case R.id.btnBottle: //case mRadioButton0.getId():
-                        LoginManager.getInstance().setRecycleCategory(ResultType.BOTTLE.getMemo());
+                        LoginManager.getInstance(SettingActivity.this).setRecycleCategory(ResultType.BOTTLE.getMemo());
                         break;
 
                     case R.id.btnCan: //case mRadioButton1.getId():
-                        LoginManager.getInstance().setRecycleCategory(ResultType.CAN.getMemo());
+                        LoginManager.getInstance(SettingActivity.this).setRecycleCategory(ResultType.CAN.getMemo());
                         break;
 
                     case R.id.btnBattery: //case mRadioButton2.getId():
-                        LoginManager.getInstance().setRecycleCategory(ResultType.BATTERY.getMemo());
+                        LoginManager.getInstance(SettingActivity.this).setRecycleCategory(ResultType.BATTERY.getMemo());
                         break;
 
                     case R.id.btnGlass: //case mRadioButton3.getId():
-                        LoginManager.getInstance().setRecycleCategory(ResultType.GLASS.getMemo());
+                        LoginManager.getInstance(SettingActivity.this).setRecycleCategory(ResultType.GLASS.getMemo());
                         break;
                 }
             }

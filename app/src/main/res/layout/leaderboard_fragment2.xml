@@ -1,72 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="80dp"
-    android:paddingRight="40dp"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/textLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/leaderboaed_avatar"
-        android:orientation="vertical">
+    <View
+        android:id="@+id/leaderboardRecyclerviewLeftView"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/leaderboardTextRelativeLayout"
+        android:layout_alignBottom="@+id/leaderboardTextRelativeLayout"/>
+        <!--android:background="@color/yellow_background_F6C946"-->
+        <!--/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="第一名"
-            android:textColor="@color/progress_bar_background_end_4D555B"
-            android:textSize="30sp" />
+    <View
+        android:id="@+id/leaderboardRecyclerviewRightView"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/leaderboardTextRelativeLayout"
+        android:layout_alignBottom="@+id/leaderboardTextRelativeLayout"/>
+        <!--android:background="@color/yellow_background_F6C946"/>-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/lebelTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="等級"
-                android:textColor="@color/progress_bar_progress_start_F04A4A"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="20"
-                android:textColor="@color/btn_logout_background_F04848"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/leaderboaed_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@id/textLinearLayout"
-        android:src="@drawable/avatar_icon_sunglow" />
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/leaderboardTextRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/leaderboaed_avatar"
-        android:gravity="center_horizontal"
-        android:text="謝承豫"
-        android:textSize="40sp"
-        android:textStyle="bold" />
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="40dp"
+        android:paddingTop="20dp">
 
+        <LinearLayout
+            android:id="@+id/textLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/leaderboaed_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rank"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="第 1 名"
+                android:textColor="@color/progress_bar_background_end_4D555B"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/lebelTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="等級"
+                    android:textColor="@color/progress_bar_progress_start_F04A4A"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leaderboardLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="20"
+                    android:textColor="@color/btn_logout_background_F04848"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/leaderboaed_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/textLinearLayout"
+            android:src="@drawable/avatar_icon_sunglow" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/leaderboaed_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/leaderboardMonsterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="謝承豫"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/leaderboardNickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="一年甲班"
+                android:textSize="30sp"
+                android:textColor="@color/leaderboard_nickname_gray_909090"/>
+
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
 </RelativeLayout>

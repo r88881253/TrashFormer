@@ -50,12 +50,12 @@ public class CreateUserActivity extends BaseActivity {
         setStatusBar(R.color.yellow_background_F6C946);
     }
 
-    private void initListner(){
+    private void initListner() {
 
         binding.btnCreateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!Strings.isEmptyOrWhitespace(viewmodel.getAccount()) && !Strings.isEmptyOrWhitespace(viewmodel.getPassword()) && !Strings.isEmptyOrWhitespace(viewmodel.getNickName())){
+                if (!Strings.isEmptyOrWhitespace(viewmodel.getAccount()) && !Strings.isEmptyOrWhitespace(viewmodel.getPassword()) && !Strings.isEmptyOrWhitespace(viewmodel.getNickName())) {
                     createUser(viewmodel.getAccount(), viewmodel.getPassword(), viewmodel.getNickName());
                 }
 
@@ -63,7 +63,7 @@ public class CreateUserActivity extends BaseActivity {
         });
     }
 
-    private String encodeString(String plainText){
+    private String encodeString(String plainText) {
         byte[] bin = plainText.getBytes();
         //String hex = DigestUtils.sha256Hex(bin); こっちはランタイムエラーになる
         byte[] sha256 = DigestUtils.sha256(bin);
@@ -71,23 +71,25 @@ public class CreateUserActivity extends BaseActivity {
         return new String(hexChars);
     }
 
-    private void createUser(final String account, final String password, final String nickName){
-        FirebaseAuthManager.getInstance().createUser(account, password, new OnCompleteListener<AuthResult>(){
+    private void createUser(final String account, final String password, final String nickName) {
+        showProgressDialog();
+        FirebaseAuthManager.getInstance().createUser(account, password, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "createUserWithEmail:success\n"+task.getResult());
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "createUserWithEmail:success\n" + task.getResult());
                     FirebaseAuthManager.getInstance().login(account, password, new LoginOnCompleteListener(password, nickName));
 
-                }else{
-                    Log.d(TAG, "createUserWithEmail:failure\n"+ task.getException());
+                } else {
+                    Log.d(TAG, "createUserWithEmail:failure\n" + task.getException());
+                    dismissProgressDialog();
                     AlertDialog.Builder builder = new AlertDialog.Builder(CreateUserActivity.this);
                     builder.setTitle(getString(R.string.app_name))
-                            .setMessage(getString(R.string.add_user_to_database_failed))
+                            .setMessage(getString(R.string.something_failed))
                             .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                   dialog.dismiss();
+                                    dialog.dismiss();
                                 }
                             });
                 }
@@ -95,7 +97,7 @@ public class CreateUserActivity extends BaseActivity {
         });
     }
 
-    class LoginOnCompleteListener implements OnCompleteListener<AuthResult>{
+    class LoginOnCompleteListener implements OnCompleteListener<AuthResult> {
         String password;
         String nickName;
 
@@ -107,13 +109,12 @@ public class CreateUserActivity extends BaseActivity {
 
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            if(task.isSuccessful()){
-                Log.d(TAG, "login_background_layer_list:success\n"+task.getResult());
-//                AddUserListener addUserListener = new AddUserListener(FirebaseAuthManager.getInstance().getUid(), viewmodel.getPassword(), viewmodel.getNickName());
-//                FirebaseDatabaseManager.getInstance().addUser(addUserListener);
+            if (task.isSuccessful()) {
+                Log.d(TAG, "login_background_layer_list:success\n" + task.getResult());
                 addUserToDatabase(encodeString(password), nickName);
-            }else{
-                Log.d(TAG, "login_background_layer_list:failure\n"+ task.getException());
+            } else {
+                dismissProgressDialog();
+                Log.d(TAG, "login_background_layer_list:failure\n" + task.getException());
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateUserActivity.this);
                 builder.setTitle(getString(R.string.app_name))
                         .setMessage(getString(R.string.login_failed))
@@ -127,11 +128,12 @@ public class CreateUserActivity extends BaseActivity {
         }
     }
 
-    private void addUserToDatabase(String password, String nickname){
+    private void addUserToDatabase(String password, String nickname) {
         addUserToDatabaseTask(password, nickname)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
+                        dismissProgressDialog();
                         if (!task.isSuccessful()) {
                             Exception e = task.getException();
                             if (e instanceof FirebaseFunctionsException) {
@@ -139,18 +141,18 @@ public class CreateUserActivity extends BaseActivity {
                                 FirebaseFunctionsException.Code code = ffe.getCode();
                                 Object details = ffe.getDetails();
                             }
-                            Log.d("addUserToDatabaseTask: ","failed");
+                            Log.d("addUserToDatabaseTask: ", "failed");
                             AlertDialog.Builder builder = new AlertDialog.Builder(CreateUserActivity.this);
                             builder.setTitle(getString(R.string.app_name))
-                                    .setMessage(getString(R.string.add_user_to_database_failed))
+                                    .setMessage(getString(R.string.something_failed))
                                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
                                         }
                                     });
-                        }  else{
-                            Log.d("addUserToDatabaseTask: ","successed");
+                        } else {
+                            Log.d("addUserToDatabaseTask: ", "successed");
                             startChooseRecycleItem();
                         }
                     }
@@ -158,7 +160,7 @@ public class CreateUserActivity extends BaseActivity {
 
     }
 
-    private void startChooseRecycleItem(){
+    private void startChooseRecycleItem() {
         Intent i = new Intent(this, ChooseRecycleCategoryActivity.class);
         startActivity(i);
     }

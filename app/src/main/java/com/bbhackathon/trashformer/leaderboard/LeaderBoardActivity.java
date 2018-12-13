@@ -13,6 +13,7 @@ import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.entity.UserEntity;
 import com.bbhackathon.trashformer.entity.UserProfileTable;
+import com.bbhackathon.trashformer.entity.UserRankEntity;
 import com.bbhackathon.trashformer.equipment.EquipmentViewPager;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
@@ -23,9 +24,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class LeaderBoardActivity extends BaseActivity {
 
@@ -102,8 +105,35 @@ public class LeaderBoardActivity extends BaseActivity {
     class SelectUserTableListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Map<String, Object> userTableMap = (HashMap<String, Object>) dataSnapshot.getValue();
+            Map<String, UserEntity> userTableMap = (HashMap<String, UserEntity>)dataSnapshot.getValue();
             Log.d(TAG, userTableMap.toString());
+
+
+            Map<Integer, List<UserRankEntity>> leaderboardResult = new TreeMap<Integer, List<UserRankEntity>>(new Comparator<Integer>() {
+                public int compare(Integer obj1, Integer obj2) {
+                    // 降序排序
+                    return obj2.compareTo(obj1);
+                }
+            });
+
+            for (Map.Entry<String, UserEntity> entry: userTableMap.entrySet()) {
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.toJsonTree(entry.getValue());
+                UserEntity userEntity = gson.fromJson(jsonElement, UserEntity.class);
+                UserProfileTable userProfileTable = userEntity.getUserProfileTable();
+
+                int level = userProfileTable.getLevel();
+                if(leaderboardResult.get(level) ==null){
+                    leaderboardResult.put(userProfileTable.getLevel(), new ArrayList<UserRankEntity>());
+                }
+                leaderboardResult.get(userProfileTable.getLevel()).add(new UserRankEntity(userProfileTable.getNickName(), userProfileTable.getMonsterName(), userProfileTable.getLevel(), userProfileTable.getExp(), entry.getKey()));
+            }
+
+            if(leaderboardResult!= null){
+                leaderBoradFragment.setView(leaderboardResult);
+            }
+
+            Log.d(TAG, leaderboardResult.toString());
 
             Gson gson = new Gson();
             JsonElement jsonElement = gson.toJsonTree(userTableMap.get(FirebaseAuthManager.getInstance().getUid()));

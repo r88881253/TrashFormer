@@ -2,10 +2,12 @@
     <string name="app_name">TrashFormer</string>
     <string name="account">帳號</string>
     <string name="password">密碼</string>
-    <string name="nickName">暱稱：</string>
+    <string name="nickName">暱稱</string>
 
     <string name="create_account">建立帳號</string>
     <string name="login">登入</string>
+
+    <string name="loading">讀取中</string>
 
     <!--home page-->
     <string name="equipment">裝備</string>
@@ -19,6 +21,7 @@
     <string name="btn_password_confirm">確認密碼</string>
     <string name="get_present">獲得 聖誕帽 啦！</string>
     <string name="btn_get_confirm">確認領取</string>
+    <string name="defalt_unknown">\?</string>
 
     <!--分類-->
     <string name="aluminum_can">鐵鋁罐</string>
@@ -35,9 +38,12 @@
     <!--相機結果頁-->
     <string name="result">結果</string>
     <string name="you_know">/ 你知道嗎 /</string>
-    <string name="default_tips">每天商家使用的紙餐具或是紙盒，為了防水通常會在內層表面塗上一層（約 5%-7%）聚乙烯（polyethylene, PE）膠膜，或是經過浸蠟處理，讓紙杯、紙製免洗餐具變質，導致後續的回收處理困難度激增。
-
-\n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(newtalk.tw)</string>
+    <string name="default_tips">每天商家使用的紙餐具或是紙盒，為了防水通常會在內層表面塗上一層（約 5%-7%）聚乙烯（polyethylene, PE）膠膜，或是經過浸蠟處理，讓紙杯、紙製免洗餐具變質，導致後續的回收處理困難度激增。</string>
+    <string name="tips_one">寶特瓶的瓶蓋瓶環與寶特瓶屬於不同的塑膠材質，若沒有取下直接丟入回收桶，回收伯伯阿姨需要辛苦地一個個處理，才能讓寶特瓶回收再利用，因此回收寶特瓶時，要記得拆掉瓶蓋和瓶環喔！</string>
+    <string name="tips_two">飲料店、早餐店常用的紙杯、紙餐盒等紙容器不能丟到紙類回收喔！紙容器為了防水，內部都會多上一層PE膜，需要特殊處理後才能再利用，因此正確的處理方式應為，清洗乾淨後丟至「紙容器」的回收桶。</string>
+    <string name="tips_three">電子發票、ATM明細表等使用感熱方式印製的紙類，為了防水防油，使用了許多化學穩定劑，因此這種紙類無法回收，必須丟至一般垃圾喔！
+</string>
+    <string name="camera_result_success_string">沒錯，這是</string>
     <string name="keep_recognize">繼續辨識</string>
     <string name="back_home">回到首頁</string>
 
@@ -49,7 +55,7 @@
 
     <string name="create_user_failed">新增用戶失敗，請重試</string>
     <string name="login_failed">登入失敗，請重試</string>
-    <string name="add_user_to_database_failed">發生錯誤，請重試</string>
+    <string name="something_failed">發生錯誤，請重試</string>
 
     <string name="confirm">確認</string>
     <string name="cancel">取消</string>

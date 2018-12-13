@@ -34,7 +34,7 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
     private void initView() {
         uncheckLinearLayout();
 
-        String recycleCategory = LoginManager.getInstance().getRecycleCategory();
+        String recycleCategory = LoginManager.getInstance(ChooseRecycleCategoryActivity.this).getRecycleCategory();
         if (recycleCategory != "") {
             check(ResultType.getResultType(recycleCategory));
         }
@@ -78,9 +78,11 @@ public class ChooseRecycleCategoryActivity extends BaseActivity {
         binding.btnChooseRecycleCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selectCategory != null && selectCategory != ResultType.UNKNOWN){
-                    LoginManager.getInstance().setRecycleCategory(selectCategory.getMemo());
-                    startActivity(new Intent(ChooseRecycleCategoryActivity.this, HomeActivity.class));
+                if (selectCategory != null && selectCategory != ResultType.UNKNOWN) {
+                    LoginManager.getInstance(ChooseRecycleCategoryActivity.this).setRecycleCategory(selectCategory.getMemo());
+                    Intent i = new Intent(ChooseRecycleCategoryActivity.this, HomeActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(i);
                 }
             }
         });

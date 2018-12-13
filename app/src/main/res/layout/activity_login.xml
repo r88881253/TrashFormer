@@ -14,15 +14,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login_background_layer_list"
-        android:gravity="center">
+        android:background="@drawable/login_background_layer_list">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="150dp"
             android:layout_centerInParent="true"
             android:gravity="center"
+            android:paddingBottom="100dp"
             android:orientation="vertical">
 
             <ImageView
@@ -33,7 +33,7 @@
             <ImageView
                 android:layout_width="480dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="20dp"
                 android:src="@drawable/logo" />
 
 
@@ -50,14 +50,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/account"
                     android:textColor="@color/inputText_4D555B"
-                    android:textSize="30sp"/>
+                    android:textSize="30sp" />
 
                 <EditText
                     android:id="@+id/accountEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:layout_marginLeft="16dp"
+                    android:background="@null"
                     android:maxLines="1"
                     android:text="@={viewmodel.account}"
                     android:textColor="@color/inputText_4D555B"
@@ -68,8 +68,8 @@
                 android:id="@+id/password_layout"
                 android:layout_width="504dp"
                 android:layout_height="80dp"
-                android:background="@drawable/login_text_input_layout"
                 android:layout_marginTop="18dp"
+                android:background="@drawable/login_text_input_layout"
                 android:orientation="horizontal">
 
                 <TextView
@@ -77,14 +77,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/password"
                     android:textColor="@color/inputText_4D555B"
-                    android:textSize="30sp"/>
+                    android:textSize="30sp" />
 
                 <EditText
                     android:id="@+id/passwordEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:layout_marginLeft="16dp"
+                    android:background="@null"
+                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:text="@={viewmodel.password}"
                     android:textColor="@color/inputText_4D555B"
@@ -107,8 +108,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_login_shape"
                     android:text="@string/create_account"
-                    android:textSize="25sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -124,8 +125,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/btn_login_shape"
                     android:text="@string/login"
-                    android:textSize="25sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
 
             </LinearLayout>
         </LinearLayout>

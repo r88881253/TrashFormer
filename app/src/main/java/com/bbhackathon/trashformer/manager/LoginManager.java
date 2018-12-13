@@ -19,7 +19,10 @@ public class LoginManager {
         sharedPreferences = context.getSharedPreferences("TrashFormer", context.MODE_PRIVATE);
     }
 
-    public static LoginManager getInstance(){
+    public static LoginManager getInstance(Context context){
+        if(mLoginManager == null){
+            mLoginManager = new LoginManager(context);
+        }
         return mLoginManager;
     }
 

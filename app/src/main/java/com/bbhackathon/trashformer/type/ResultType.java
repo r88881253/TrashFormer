@@ -63,6 +63,22 @@ public enum ResultType {
                 return UNKNOWN;
         }
     }
+
+    public String getResultDatabaseItem(ResultType resultType) {
+        switch (resultType) {
+            case BOTTLE:
+                return "bottleRecycleCount";
+            case CAN:
+                return "canRecycleCount";
+            case BATTERY:
+                return "batteryRecycleCount";
+            case GLASS:
+                return "glassRecycleCount";
+            case UNKNOWN:
+            default:
+                return "othersRecycleCount";
+        }
+    }
 }
 
 
