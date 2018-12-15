@@ -10,6 +10,8 @@ public enum ResultType {
 
     GLASS(4, "玻璃"),
 
+    PLASTIC(5, "塑膠"),
+
     UNKNOWN(99, "未知");
 
     private int code;
@@ -37,6 +39,8 @@ public enum ResultType {
         return equals(ResultType.GLASS);
     }
 
+    public boolean isPlastic(){return equals(ResultType.PLASTIC);}
+
     public boolean isCan() {
         return equals(ResultType.CAN);
     }
@@ -59,6 +63,8 @@ public enum ResultType {
                 return BATTERY;
             case "玻璃":
                 return GLASS;
+            case "塑膠":
+                return PLASTIC;
             default:
                 return UNKNOWN;
         }
@@ -74,6 +80,8 @@ public enum ResultType {
                 return "batteryRecycleCount";
             case GLASS:
                 return "glassRecycleCount";
+            case PLASTIC:
+                return "plasticRecycleCount";
             case UNKNOWN:
             default:
                 return "othersRecycleCount";
