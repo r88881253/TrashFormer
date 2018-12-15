@@ -46,7 +46,8 @@ public class ResultAnalysis {
         if(result.isBottle()){
 
             // 進階判斷為Plastic/Bottle,若結果仍為Bottle視為Plastic
-            result = doAdvanceAnalysis(entityList).isBottle() ? ResultType.PLASTIC : ResultType.GLASS;
+            result = doAdvanceAnalysis(entityList);
+            result = result.isBottle() ? ResultType.PLASTIC : result;
         }
 
 //        for (CameraResultEntity entity : entityList) {
