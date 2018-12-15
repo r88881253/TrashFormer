@@ -16,7 +16,8 @@ import java.util.List;
 
 public class EquipmentFragment extends Fragment {
 
-
+    List<String> mList;
+    EquipmentAdapter mAdapter;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -29,13 +30,13 @@ public class EquipmentFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.equipment_fragment, container, false);
 
 
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add("123");
+        if(mList == null){
+            mList = new ArrayList<>();
+            mList.add("equipment_empty");
+            mList.add("equipment_h_xmas_hat");
         }
 
-
-        EquipmentAdapter mAdapter = new EquipmentAdapter(getContext(), list);
+        mAdapter = new EquipmentAdapter(getContext(), mList);
         RecyclerView mRecyclerView = rootView.findViewById(R.id.equipmentRecyclerView);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -46,5 +47,13 @@ public class EquipmentFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void updateData(List<String> list) {
+        if(mList != null){
+            mList.clear();
+            mList.addAll(list);
+        }
+        mAdapter.notifyDataSetChanged(); //刷新
     }
 }
