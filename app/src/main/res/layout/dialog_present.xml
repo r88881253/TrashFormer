@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/get_present"
+        android:text=""
         android:textColor="@color/inputText_4D555B"
         android:textSize="30dp" />
 
@@ -25,13 +25,13 @@
         android:layout_marginBottom="-30dp">
 
         <ImageView
+            android:id="@+id/presentImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:paddingBottom="100dp"
             android:elevation="1dp"
-            android:src="@drawable/avartar_head_xmas_hat" />
+            android:src="@drawable/equipment_l_deco_ball" />
 
         <ImageView
             android:layout_width="400dp"

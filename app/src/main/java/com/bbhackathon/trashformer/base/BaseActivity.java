@@ -16,7 +16,7 @@ public class BaseActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     AlertDialog alertDialog;
 
-    protected void hideKeyboard() {
+    public void hideKeyboard() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 

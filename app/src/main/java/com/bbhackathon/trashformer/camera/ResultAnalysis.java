@@ -175,7 +175,7 @@ public class ResultAnalysis {
         }
 
         if(glassCount > 0){
-            glassConfident = glassCount / glassCount;
+            glassConfident = glassConfident / glassCount;
         }
 
         if(plasticCount > 0){

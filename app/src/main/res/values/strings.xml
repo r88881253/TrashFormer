@@ -19,7 +19,8 @@
     <string name="mission">任務：</string>
     <string name="input_password_to_setting">請輸入密碼以進入設定</string>
     <string name="btn_password_confirm">確認密碼</string>
-    <string name="get_present">獲得 聖誕帽 啦！</string>
+    <string name="get_present_prefix">獲得</string>
+    <string name="get_present_suffix">啦！</string>
     <string name="btn_get_confirm">確認領取</string>
     <string name="defalt_unknown">\?</string>
 
@@ -43,7 +44,9 @@
     <string name="tips_two">飲料店、早餐店常用的紙杯、紙餐盒等紙容器不能丟到紙類回收喔！紙容器為了防水，內部都會多上一層PE膜，需要特殊處理後才能再利用，因此正確的處理方式應為，清洗乾淨後丟至「紙容器」的回收桶。</string>
     <string name="tips_three">電子發票、ATM明細表等使用感熱方式印製的紙類，為了防水防油，使用了許多化學穩定劑，因此這種紙類無法回收，必須丟至一般垃圾喔！
 </string>
-    <string name="camera_result_success_string">沒錯，這是</string>
+    <string name="camera_result_success_string">正確！這是</string>
+    <string name="camera_result_failed_string">丟錯囉！這是</string>
+    <string name="camera_result_exp">經驗值</string>
     <string name="keep_recognize">繼續辨識</string>
     <string name="back_home">回到首頁</string>
 
@@ -61,4 +64,6 @@
     <string name="cancel">取消</string>
 
 
+    <string name="testAccount">test202@gmail.com</string>
+    <string name="testPassword">testtest</string>
 </resources>

@@ -234,6 +234,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/monsterRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

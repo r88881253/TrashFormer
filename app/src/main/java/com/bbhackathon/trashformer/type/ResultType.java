@@ -10,7 +10,7 @@ public enum ResultType {
 
     GLASS(4, "玻璃"),
 
-    PLASTIC(5, "塑膠"),
+    PLASTIC(5, "寶特瓶"),
 
     UNKNOWN(99, "未知");
 

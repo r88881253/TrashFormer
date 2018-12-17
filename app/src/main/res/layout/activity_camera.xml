@@ -67,7 +67,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="40dp"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
                         android:paddingBottom="20dp"
@@ -79,15 +79,16 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="沒錯，這是鐵鋁罐！"
+                            android:text=""
                             android:textSize="30sp" />
 
                         <TextView
+                            android:id="@+id/camera_result_exp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="經驗值 +50"
+                            android:text="@string/camera_result_exp"
                             android:textColor="@color/btn_login_border_A699ED"
                             android:textSize="24sp" />
 
@@ -111,8 +112,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="110dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="60dp"
                         android:text="@string/you_know"
                         android:textColor="@color/leaderboard_background_F04848"
                         android:textSize="30sp" />

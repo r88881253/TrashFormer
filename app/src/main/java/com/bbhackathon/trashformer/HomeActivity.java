@@ -14,8 +14,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.base.BaseActivity;
@@ -65,7 +67,8 @@ public class HomeActivity extends BaseActivity {
     private final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 1003;
     private ActivityHomeBinding mBinding;
 
-    private String mCurrentPhotoPath;
+
+    private String monsterName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +135,12 @@ public class HomeActivity extends BaseActivity {
             public void onClick(View v) {
                 if(mBinding.monsterName.isEnabled()){
                     mBinding.monsterName.setEnabled(false);
-                    updateMonsterName(mBinding.monsterName.getText().toString());
+
+                    Editable monsterNameEditable = mBinding.monsterName.getText();
+                    if(monsterNameEditable != null && monsterNameEditable.toString() != monsterName){
+                        updateMonsterName(monsterNameEditable.toString());
+                        monsterName = monsterNameEditable.toString();
+                    }
                 } else {
                     mBinding.monsterName.setEnabled(true);
                 }
@@ -172,6 +180,11 @@ public class HomeActivity extends BaseActivity {
 //        progressAnimator.start();
     }
 
+    @Override
+    protected void onPause() {
+        mBinding.monsterName.setEnabled(false);
+        super.onPause();
+    }
 
     class SelectUserDataListener implements ValueEventListener {
         @Override
@@ -181,6 +194,7 @@ public class HomeActivity extends BaseActivity {
                 Log.d(TAG, userProfile.toString());
                 if (userProfile.getMonsterName() != null) {
                     mBinding.monsterName.setText(userProfile.getMonsterName());
+                    monsterName = userProfile.getMonsterName();
                 }
                 if (userProfile.getLevel() != 0) {
                     mBinding.monsterLevel.setText(String.valueOf(userProfile.getLevel()));
@@ -276,6 +290,12 @@ public class HomeActivity extends BaseActivity {
                 mBinding.heart5.setImageResource(R.drawable.heart);
             }
 
+        }
+
+        if(heartCount <= 0){
+            mBinding.monsterRelativeLayout.setVisibility(View.INVISIBLE);
+        } else{
+            mBinding.monsterRelativeLayout.setVisibility(View.VISIBLE);
         }
     }
 

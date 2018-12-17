@@ -76,6 +76,7 @@
                     android:layout_marginLeft="16dp"
                     android:background="@null"
                     android:maxLines="1"
+                    android:inputType="textPassword"
                     android:textColor="@color/inputText_4D555B"
                     android:textSize="30sp"
                     android:text="@={viewmodel.password}"/>

@@ -30,6 +30,7 @@ import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
+import com.bbhackathon.trashformer.manager.LoginManager;
 import com.bbhackathon.trashformer.type.ResultType;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -330,13 +331,24 @@ public class CameraActivity extends BaseActivity {
 
                                         ResultType resultType = new ResultAnalysis().doAnalysis((ArrayList) getCloudCameraResult(labels));
 
-                                        SpannableString span = new SpannableString(getString(R.string.camera_result_success_string) + resultType.getMemo() + "！");
-                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.inputText_4D555B)), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.btn_login_background_806EE6)), 5, span.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        SpannableString span;
+                                        Boolean isRightRecycleItem;
+                                        if(resultType == ResultType.getResultType(LoginManager.getInstance(getBaseContext()).getRecycleCategory())){
+                                            span = new SpannableString(getString(R.string.camera_result_success_string) + resultType.getMemo() + "！");
+                                            ((TextView) findViewById(R.id.camera_result_exp)).setText(getString(R.string.camera_result_exp) + " +50");
+                                            isRightRecycleItem = true;
+                                        } else{
+                                            span = new SpannableString(getString(R.string.camera_result_failed_string) + resultType.getMemo() + "！");
+                                            ((TextView) findViewById(R.id.camera_result_exp)).setText(getString(R.string.camera_result_exp) + " -20");
+                                            isRightRecycleItem = false;
+                                        }
+
+                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.inputText_4D555B)), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.btn_login_background_806EE6)), 6, span.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                         span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.inputText_4D555B)), span.length(), span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                                         ((TextView) findViewById(R.id.camera_result_type)).setText(span);
 
-                                        updateExp(0, resultType.getMemo());
+                                        updateExp(resultType.getMemo(), isRightRecycleItem);
 
                                         ((RelativeLayout) findViewById(R.id.cameraRelativeLayout)).setVisibility(View.VISIBLE);
 
@@ -377,8 +389,8 @@ public class CameraActivity extends BaseActivity {
         return entity;
     }
 
-    private void updateExp(int exp, String recycleItem) {
-        updateExpToDatabaseTask(exp, recycleItem)
+    private void updateExp(String recycleItem, Boolean isRightRecycleItem) {
+        updateExpToDatabaseTask(recycleItem, isRightRecycleItem)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
@@ -407,14 +419,14 @@ public class CameraActivity extends BaseActivity {
 
     }
 
-    private Task<String> updateExpToDatabaseTask(int exp, String recycleItem) {
+    private Task<String> updateExpToDatabaseTask(String recycleItem, Boolean isRightRecycleItem) {
         FirebaseFunctions mFunctions;
         mFunctions = FirebaseFunctions.getInstance();
 
         // Create the arguments to the callable function.
         Map<String, Object> data = new HashMap<>();
-        data.put("exp", 40);
         data.put("recycleItem", recycleItem);
+        data.put("isRightRecycleItem", isRightRecycleItem);
 
         return mFunctions
                 .getHttpsCallable("updateExp")

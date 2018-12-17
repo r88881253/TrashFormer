@@ -16,14 +16,24 @@ import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
 import com.bbhackathon.trashformer.setting.logout.LogoutDialog;
 import com.bbhackathon.trashformer.type.ResultType;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends BaseActivity {
     private String TAG = SettingActivity.class.getSimpleName();
 
     private ActivitySettingBinding mBinding;
+    String originalNickName;
 
     //0:無 1:寶特瓶 2:鐵鋁罐 3:電池 4:玻璃瓶
     private ResultType selectCategory;
@@ -57,12 +67,6 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-//
-//        mBinding.dialogSetting.btnBottle.setOnCheckedChangeListener(new CheckListener());
-//        mBinding.dialogSetting.btnCan.setOnCheckedChangeListener(new CheckListener());
-//        mBinding.dialogSetting.btnBattery.setOnCheckedChangeListener(new CheckListener());
-//        mBinding.dialogSetting.btnGlass.setOnCheckedChangeListener(new CheckListener());
-
         mBinding.dialogSetting.recyclerItemLinearLayout.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -91,50 +95,26 @@ public class SettingActivity extends BaseActivity {
     private void check(ResultType category) {
         switch (category) {
             case BOTTLE:
-                uncheckCheckbox();
                 selectCategory = ResultType.BOTTLE;
                 mBinding.dialogSetting.btnBottle.setChecked(true);
                 break;
             case CAN:
-                uncheckCheckbox();
                 selectCategory = ResultType.CAN;
                 mBinding.dialogSetting.btnCan.setChecked(true);
                 break;
             case BATTERY:
-                uncheckCheckbox();
                 selectCategory = ResultType.BATTERY;
                 mBinding.dialogSetting.btnBattery.setChecked(true);
                 break;
             case GLASS:
-                uncheckCheckbox();
                 selectCategory = ResultType.GLASS;
                 mBinding.dialogSetting.btnGlass.setChecked(true);
                 break;
             case UNKNOWN:
             default:
-                uncheckCheckbox();
                 break;
         }
     }
-
-    private void uncheckCheckbox() {
-//        mBinding.dialogSetting.btnBottle.setChecked(false);
-//        mBinding.dialogSetting.btnCan.setChecked(false);
-//        mBinding.dialogSetting.btnBattery.setChecked(false);
-//        mBinding.dialogSetting.btnGlass.setChecked(false);
-    }
-
-//    class CheckListener implements CompoundButton.OnCheckedChangeListener{
-//        @Override
-//        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//            if(isChecked){
-//                uncheckCheckbox();
-//                compoundButton.setChecked(true);
-//            } else{
-//                compoundButton.setChecked(true);
-//            }
-//        }
-//    }
 
     class SelectUserDataListener implements ValueEventListener {
         @Override
@@ -143,6 +123,7 @@ public class SettingActivity extends BaseActivity {
             if (userProfile != null) {
                 Log.d(TAG, userProfile.toString());
                 if (userProfile.getNickName() != null) {
+                    originalNickName = userProfile.getNickName();
                     mBinding.dialogSetting.nickNameEditText.setText(userProfile.getNickName());
                 }
             }
@@ -152,5 +133,63 @@ public class SettingActivity extends BaseActivity {
         public void onCancelled(@NonNull DatabaseError databaseError) {
             Log.d(TAG, "The read failed: " + databaseError.getCode());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBinding.dialogSetting.nickNameEditText.getText() != null) {
+            String nickName = mBinding.dialogSetting.nickNameEditText.getText().toString();
+
+            if (nickName != originalNickName) {
+                updateNickName(nickName);
+            }
+        }
+        super.onBackPressed();
+    }
+
+    private void updateNickName(String nickname) {
+        updateNickNameTask(nickname)
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        dismissProgressDialog();
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("updateNickNameTask: ", "failed");
+                        } else {
+                            Log.d("updateNickNameTask: ", "successed");
+                        }
+                    }
+                });
+
+    }
+
+
+    private Task<String> updateNickNameTask(String nickName) {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
+
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+        data.put("nickName", nickName);
+
+        return mFunctions
+                .getHttpsCallable("updateNickName")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
     }
 }
