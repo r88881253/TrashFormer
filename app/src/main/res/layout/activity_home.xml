@@ -242,29 +242,30 @@
             android:paddingTop="100dp">
 
             <ImageView
-                android:id="@+id/avatar_head"
+                android:id="@+id/avatarHead"
                 android:layout_width="280dp"
                 android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:elevation="1dp"
-                android:src="@drawable/avartar_head_xmas_hat" />
+                android:src="@drawable/monster_h_empty" />
 
             <LinearLayout
                 android:id="@+id/avatar_body_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/avatar_head"
+                android:layout_below="@id/avatarHead"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="-130dp"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/avatarLeftHand"
                     android:layout_width="160dp"
                     android:layout_height="240dp"
                     android:layout_marginRight="-25dp"
                     android:layout_marginTop="30dp"
                     android:layout_toLeftOf="@id/avatar_body"
-                    android:src="@drawable/avatar_left_candycane" />
+                    android:src="@drawable/monster_l_normal" />
 
                 <ImageView
                     android:id="@+id/avatar_body"
@@ -274,16 +275,18 @@
                     android:src="@drawable/avatar_body_normal" />
 
                 <ImageView
+                    android:id="@+id/avatarRightHand"
                     android:layout_width="160dp"
                     android:layout_height="240dp"
                     android:layout_marginLeft="-25dp"
                     android:layout_marginTop="30dp"
                     android:layout_toRightOf="@id/avatar_body"
-                    android:src="@drawable/avatar_right_normal" />
+                    android:src="@drawable/monster_r_normal" />
 
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/avatarFeet"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/avatar_body_layout"

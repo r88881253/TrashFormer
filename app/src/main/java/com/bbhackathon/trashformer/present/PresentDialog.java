@@ -18,10 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.R;
+import com.bbhackathon.trashformer.entity.EquipmentEntity;
 import com.bbhackathon.trashformer.equipment.drawable.DrawableName;
+import com.bbhackathon.trashformer.manager.LoginManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class PresentDialog extends DialogFragment {
@@ -44,30 +48,47 @@ public class PresentDialog extends DialogFragment {
 
         String recycleItem = "聖誕帽";
 
+        Map<String, EquipmentEntity> currentMap = new HashMap<>(DrawableName.equipNameMap);
 
-        List<String> equipmentMapKeyList = new ArrayList<>(DrawableName.equipNameMap.keySet());
-        int randomNumPresent = new Random().nextInt(equipmentMapKeyList.size());
-        String randomPresentKey = equipmentMapKeyList.get(randomNumPresent);
-        String randomPresentName = DrawableName.equipNameMap.get(randomPresentKey);
-
-        if(randomPresentName != null){
-            recycleItem = randomPresentName;
+        for(String key: LoginManager.getInstance(getContext()).getEquipment().keySet()){
+            if(DrawableName.equipNameMap.containsKey(key)){
+                currentMap.remove(key);
+            }
         }
 
-        ImageView presentImageView = (ImageView) view.findViewById(R.id.presentImageView);
-        Drawable randomPresentDrawable = getDrawable(randomPresentKey);
-        if(randomPresentDrawable != null){
-            presentImageView.setImageDrawable(randomPresentDrawable);
+
+        if(currentMap.size() > 0){
+            List<String> equipmentMapKeyList = new ArrayList<>(currentMap.keySet());
+            int randomNumPresent = new Random().nextInt(equipmentMapKeyList.size());
+            String randomPresentKey = equipmentMapKeyList.get(randomNumPresent);
+            String randomPresentName = currentMap.get(randomPresentKey).getName();
+
+            if(randomPresentName != null){
+                recycleItem = randomPresentName;
+            }
+
+            LoginManager.getInstance(getContext()).addEquipment(new EquipmentEntity(DrawableName.equipNameMap.get(randomPresentKey).getName(), randomPresentKey, false));
+
+            ImageView presentImageView = (ImageView) view.findViewById(R.id.presentImageView);
+            Drawable randomPresentDrawable = getDrawable(randomPresentKey);
+            if(randomPresentDrawable != null){
+                presentImageView.setImageDrawable(randomPresentDrawable);
+            }
+
+            SpannableString getPresentString = new SpannableString("獲得 " + recycleItem + " 啦！");
+            getPresentString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.btn_login_background_806EE6)), 3, 3 + recycleItem.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            getPresentTextView.setText(getPresentString);
+        } else{
+            Toast.makeText(getContext(), "已經沒有裝備可兌換了",
+                    Toast.LENGTH_SHORT).show();
         }
 
-        SpannableString getPresentString = new SpannableString("獲得 " + recycleItem + " 啦！");
-        getPresentString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.btn_login_background_806EE6)), 3, 3 + recycleItem.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        getPresentTextView.setText(getPresentString);
 
         Button btnLogout = (Button) view.findViewById(R.id.btnReceivePresent);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getDialog().dismiss();
             }
         });
 

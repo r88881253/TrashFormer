@@ -81,6 +81,7 @@ public class BeforeLoginActivity extends BaseActivity {
 
     private void checkLogin(){
         mLoginmanager = new LoginManager(this.getApplicationContext());
+        mLoginmanager.clearEquipment();
 
         FirebaseUser user = FirebaseAuthManager.getInstance().getUser();
 

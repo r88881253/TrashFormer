@@ -1,5 +1,7 @@
 package com.bbhackathon.trashformer.equipment.drawable;
 
+import com.bbhackathon.trashformer.entity.EquipmentEntity;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -7,26 +9,30 @@ import java.util.Map;
 
 public class DrawableName {
 
-    public final static Map<String, String> equipNameMap = new HashMap<String, String>() {{
-        put("equipment_empty","無");
-        put("equipment_f_boots","靴子");
-        put("equipment_f_xmas_socks","聖誕襪");
-        put("equipment_h_deer_hat","麋鹿帽");
-        put("equipment_h_wreath_hat","花圈帽");
-        put("equipment_h_xmas_hat","聖誕帽");
-        put("equipment_h_xmas_tree_hat","聖誕樹帽");
+    public final static Map<String, EquipmentEntity> equipNameMap = new HashMap<String, EquipmentEntity>() {{
+        put("equipment_f_empty", new EquipmentEntity("無", "equipment_f_empty", false));
+        put("equipment_f_boots", new EquipmentEntity("靴子", "equipment_f_boots", false));
+        put("equipment_f_xmas_socks", new EquipmentEntity("聖誕襪", "equipment_f_xmas_socks", false));
 
-        put("equipment_l_candle","左手蠟燭");
-        put("equipment_l_candycane","左手拐杖糖");
-        put("equipment_l_deco_ball","左手耶誕球");
-        put("equipment_l_snowman_stick","左手木仗");
-        put("equipment_l_xmas_bell","左手鈴鐺");
+        put("equipment_h_empty", new EquipmentEntity("無", "equipment_h_empty", false));
+        put("equipment_h_deer_hat", new EquipmentEntity("麋鹿帽", "equipment_h_deer_hat", false));
+        put("equipment_h_wreath_hat", new EquipmentEntity("花圈帽", "equipment_h_wreath_hat", false));
+        put("equipment_h_xmas_hat", new EquipmentEntity("聖誕帽", "equipment_h_xmas_hat", false));
+        put("equipment_h_xmas_tree_hat", new EquipmentEntity("聖誕樹帽", "equipment_h_xmas_tree_hat", false));
 
-        put("equipment_r_candle","右手蠟燭");
-        put("equipment_r_candycane","右手拐杖糖");
-        put("equipment_r_deco_ball","右手耶誕球");
-        put("equipment_r_snowman_stick","右手木仗");
-        put("equipment_r_xmas_bell","右手鈴鐺");
+        put("equipment_l_empty", new EquipmentEntity("無", "equipment_l_empty", false));
+        put("equipment_l_candle", new EquipmentEntity("左手蠟燭", "equipment_l_candle", false));
+        put("equipment_l_candycane", new EquipmentEntity("左手拐杖糖", "equipment_l_candycane", false));
+        put("equipment_l_deco_ball", new EquipmentEntity("左手耶誕球", "equipment_l_deco_ball", false));
+        put("equipment_l_snowman_stick", new EquipmentEntity("左手木仗", "equipment_l_snowman_stick", false));
+        put("equipment_l_xmas_bell", new EquipmentEntity("左手鈴鐺", "equipment_l_xmas_bell", false));
+
+        put("equipment_r_empty", new EquipmentEntity("無", "equipment_r_empty", false));
+        put("equipment_r_candle", new EquipmentEntity("右手蠟燭", "equipment_r_candle", false));
+        put("equipment_r_candycane", new EquipmentEntity("右手拐杖糖", "equipment_r_candycane", false));
+        put("equipment_r_deco_ball", new EquipmentEntity("右手耶誕球", "equipment_r_deco_ball", false));
+        put("equipment_r_snowman_stick", new EquipmentEntity("右手木仗", "equipment_r_snowman_stick", false));
+        put("equipment_r_xmas_bell", new EquipmentEntity("右手鈴鐺", "equipment_r_xmas_bell", false));
     }};
 
     public static List<String> equipmentNameList = Arrays.asList("equipment_empty", "equipment_f_boots", "equipment_f_xmas_socks", "equipment_h_deer_hat", "equipment_h_wreath_hat",

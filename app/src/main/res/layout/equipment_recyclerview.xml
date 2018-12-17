@@ -5,26 +5,28 @@
     android:orientation="vertical">
 
 
-    <RadioButton
-        android:id="@+id/equipmentRadioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:button="@drawable/equipment_empty"
-        android:background="@drawable/equipment_selector"/>
-
-    <!--<LinearLayout-->
+    <!--<RadioButton-->
+        <!--android:id="@+id/equipmentRadioButton"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:layout_margin="40dp"-->
-        <!--android:background="@drawable/equipment_default_shape">-->
+        <!--android:button="@drawable/equipment_empty"-->
+        <!--android:background="@drawable/equipment_selector"/>-->
 
-        <!--<ImageView-->
-            <!--android:id="@+id/equipmentImageview"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:src="@drawable/equipment_empty" />-->
 
-    <!--</LinearLayout>-->
+    <LinearLayout
+        android:id="@+id/equipmentLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:background="@drawable/equipment_default_shape">
+
+        <ImageView
+            android:id="@+id/equipmentImageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/equipment_empty" />
+
+    </LinearLayout>
 </LinearLayout>

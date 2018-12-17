@@ -4,9 +4,11 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,12 +27,15 @@ import com.bbhackathon.trashformer.camera.CameraActivity;
 import com.bbhackathon.trashformer.camera.CameraResultActivity;
 import com.bbhackathon.trashformer.databinding.ActivityHomeBinding;
 import com.bbhackathon.trashformer.entity.CameraResultEntity;
+import com.bbhackathon.trashformer.entity.EquipmentEntity;
 import com.bbhackathon.trashformer.entity.UserMissionEntity;
 import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.bbhackathon.trashformer.equipment.EquipmentActivity;
+import com.bbhackathon.trashformer.equipment.drawable.DrawableName;
 import com.bbhackathon.trashformer.leaderboard.LeaderBoardActivity;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
+import com.bbhackathon.trashformer.manager.LoginManager;
 import com.bbhackathon.trashformer.present.PresentDialog;
 import com.bbhackathon.trashformer.setting.password.PasswordDialog;
 import com.google.android.gms.tasks.Continuation;
@@ -92,6 +97,42 @@ public class HomeActivity extends BaseActivity {
     private void initView() {
         FirebaseDatabaseManager.getInstance().selectUserProfileTable(FirebaseAuthManager.getInstance().getUid(), new SelectUserDataListener());
         FirebaseDatabaseManager.getInstance().selectMissionTable(FirebaseAuthManager.getInstance().getUid(), new SelectMissionDataListener());
+        getEquipment();
+    }
+
+    private void getEquipment() {
+        Map<String, EquipmentEntity> equipmentEntityMap = LoginManager.getInstance(this).getEquipment();
+
+        for(String key: equipmentEntityMap.keySet()){
+            if(equipmentEntityMap.get(key).isEquipStatus()){
+                if(key.contains("equipment_h")){
+                    if(key.contains("empty")){
+                        mBinding.avatarHead.setImageDrawable(getResources().getDrawable(R.drawable.monster_h_empty));
+                    }else{
+                        mBinding.avatarHead.setImageDrawable(getDrawable("monster_h_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_r")){
+                    if(key.contains("empty")){
+                        mBinding.avatarRightHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_r_normal));
+                    }else{
+                        mBinding.avatarRightHand.setImageDrawable(getDrawable("monster_r_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_l")){
+                    if(key.contains("empty")){
+                        mBinding.avatarLeftHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_l_normal));
+                    }else{
+                        mBinding.avatarLeftHand.setImageDrawable(getDrawable("monster_l_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_f")){
+                    if(key.contains("empty")){
+                        mBinding.avatarFeet.setImageDrawable(getResources().getDrawable(R.drawable.monster_f_normal));
+                    }else{
+                        mBinding.avatarFeet.setImageDrawable(getDrawable("monster_f_" + key.substring(12)));
+                    }
+                }
+            }
+        }
+
     }
 
     private void initListner() {
@@ -150,22 +191,49 @@ public class HomeActivity extends BaseActivity {
         mBinding.missionImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBinding.missionImageView.setClickable(false);
-                openMissionGift();
-                PresentDialog dialog = new PresentDialog();
-                dialog.setCancelable(false);
-                dialog.show(getSupportFragmentManager(), "dialog");
+
+                Map<String, EquipmentEntity> currentMap = new HashMap<>(DrawableName.equipNameMap);
+
+                for(String key: LoginManager.getInstance(HomeActivity.this).getEquipment().keySet()){
+                    if(DrawableName.equipNameMap.containsKey(key)){
+                        currentMap.remove(key);
+                    }
+                }
+
+                if(currentMap.size() > 0){
+                    mBinding.missionImageView.setClickable(false);
+                    openMissionGift();
+                    PresentDialog dialog = new PresentDialog();
+                    dialog.setCancelable(false);
+                    dialog.show(getSupportFragmentManager(), "dialog");
+                }
+                else{
+                    showAlertDialog("已經沒有裝備可兌換了");
+                }
             }
         });
 
         mBinding.giftImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBinding.giftImageView.setClickable(false);
-                reduceGift();
-                PresentDialog dialog = new PresentDialog();
-                dialog.setCancelable(false);
-                dialog.show(getSupportFragmentManager(), "dialog");
+
+                Map<String, EquipmentEntity> currentMap = new HashMap<>(DrawableName.equipNameMap);
+
+                for(String key: LoginManager.getInstance(HomeActivity.this).getEquipment().keySet()){
+                    if(DrawableName.equipNameMap.containsKey(key)){
+                        currentMap.remove(key);
+                    }
+                }
+                if(currentMap.size() > 0){
+                    mBinding.giftImageView.setClickable(false);
+                    reduceGift();
+                    PresentDialog dialog = new PresentDialog();
+                    dialog.setCancelable(false);
+                    dialog.show(getSupportFragmentManager(), "dialog");
+                }
+                else{
+                    showAlertDialog("已經沒有裝備可兌換了");
+                }
             }
         });
     }
@@ -649,5 +717,12 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         this.finish();
+    }
+
+    private Drawable getDrawable(String resourceName) {
+        Resources resources = this.getResources();
+        final int resourceId = resources.getIdentifier(resourceName, "drawable",
+                this.getPackageName());
+        return resources.getDrawable(resourceId);
     }
 }

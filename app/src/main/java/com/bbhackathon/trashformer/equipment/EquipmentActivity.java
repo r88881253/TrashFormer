@@ -11,9 +11,12 @@ import android.widget.Button;
 
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
+import com.bbhackathon.trashformer.entity.EquipmentEntity;
+import com.bbhackathon.trashformer.manager.LoginManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EquipmentActivity extends BaseActivity {
 
@@ -52,11 +55,37 @@ public class EquipmentActivity extends BaseActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new EquipmentFragment(), "背景");
-        adapter.addFragment(new EquipmentFragment(), "頭");
-        adapter.addFragment(new EquipmentFragment(), "左手");
-        adapter.addFragment(new EquipmentFragment(), "右手");
-        adapter.addFragment(new EquipmentFragment(), "腳");
+//        adapter.addFragment(new EquipmentFragment(), "背景");
+
+
+        ArrayList<EquipmentEntity> headList = new ArrayList<>();
+        ArrayList<EquipmentEntity> leftHandList = new ArrayList<>();
+        ArrayList<EquipmentEntity> rightHandList = new ArrayList<>();
+        ArrayList<EquipmentEntity> feetList = new ArrayList<>();
+
+
+        Map<String, EquipmentEntity> userEquipMap = LoginManager.getInstance(this).getEquipment();
+        for(String key: userEquipMap.keySet()){
+            if(key.contains("equipment_h")){
+                headList.add(userEquipMap.get(key));
+            } else if(key.contains("equipment_r")){
+                rightHandList.add(userEquipMap.get(key));
+            } else if(key.contains("equipment_l")){
+                leftHandList.add(userEquipMap.get(key));
+            } else if(key.contains("equipment_f")){
+                feetList.add(userEquipMap.get(key));
+            }
+        }
+
+        EquipmentFragment headEquipmentFragment = EquipmentFragment.newInstance(headList, EquipType.HEAD);
+        EquipmentFragment leftHandEquipmentFragment = EquipmentFragment.newInstance(leftHandList, EquipType.LEFT_HAND);
+        EquipmentFragment rightHaneEquipmentFragment = EquipmentFragment.newInstance(rightHandList, EquipType.RIGHT_HAND);
+        EquipmentFragment feetEquipmentFragment = EquipmentFragment.newInstance(feetList, EquipType.FEET);
+
+        adapter.addFragment(headEquipmentFragment, "頭");
+        adapter.addFragment(leftHandEquipmentFragment, "左手");
+        adapter.addFragment(rightHaneEquipmentFragment, "右手");
+        adapter.addFragment(feetEquipmentFragment, "腳");
 
         viewPager.setAdapter(adapter);
     }
