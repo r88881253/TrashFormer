@@ -39,6 +39,8 @@
     <!--相機結果頁-->
     <string name="result">結果</string>
     <string name="you_know">/ 你知道嗎 /</string>
+    <string name="follow_me">/ 跟著我做 /</string>
+    <string name="can_tips">先把飲料喝光。\n再把鋁罐壓扁</string>
     <string name="default_tips">每天商家使用的紙餐具或是紙盒，為了防水通常會在內層表面塗上一層（約 5%-7%）聚乙烯（polyethylene, PE）膠膜，或是經過浸蠟處理，讓紙杯、紙製免洗餐具變質，導致後續的回收處理困難度激增。</string>
     <string name="tips_one">寶特瓶的瓶蓋瓶環與寶特瓶屬於不同的塑膠材質，若沒有取下直接丟入回收桶，回收伯伯阿姨需要辛苦地一個個處理，才能讓寶特瓶回收再利用，因此回收寶特瓶時，要記得拆掉瓶蓋和瓶環喔！</string>
     <string name="tips_two">飲料店、早餐店常用的紙杯、紙餐盒等紙容器不能丟到紙類回收喔！紙容器為了防水，內部都會多上一層PE膜，需要特殊處理後才能再利用，因此正確的處理方式應為，清洗乾淨後丟至「紙容器」的回收桶。</string>

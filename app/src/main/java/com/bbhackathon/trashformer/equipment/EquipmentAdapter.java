@@ -19,10 +19,17 @@ import java.util.List;
 public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.ViewHolder> {
     private List<EquipmentEntity> mData;
     private Context mContext;
+    private EquipmentAdapterCallback equipmentAdapterCallback;
 
     public EquipmentAdapter(Context context, List<EquipmentEntity> data) {
         this.mContext = context;
         mData = data;
+
+        try {
+            this.equipmentAdapterCallback = ((EquipmentAdapterCallback) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement AdapterCallback.");
+        }
     }
 
     @Override
@@ -63,6 +70,7 @@ public class EquipmentAdapter extends RecyclerView.Adapter<EquipmentAdapter.View
                     mData.get(position).setEquipStatus(true);
 
                     notifyDataSetChanged();
+                    equipmentAdapterCallback.setEquipment();
                 }
 //                Toast.makeText(mContext, "Item " + position + " is clicked.", Toast.LENGTH_SHORT).show();
 //                if(holder.mRadioButton.isChecked()){

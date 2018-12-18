@@ -11,59 +11,72 @@
         tools:context=".setting.SettingActivity">
 
         <RelativeLayout
+            android:id="@+id/avatar_relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <ImageView
-                android:id="@+id/avatar_head"
+                android:id="@+id/avatarHead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="-80dp"
+                android:layout_marginTop="-30dp"
                 android:elevation="1dp"
-                android:src="@drawable/avartar_head_xmas_hat" />
+                android:src="@drawable/monster_h_empty" />
 
             <LinearLayout
                 android:id="@+id/avatar_body_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/avatar_head"
+                android:layout_below="@id/avatarHead"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="-130dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="160dp"
-                    android:layout_height="240dp"
-                    android:layout_marginTop="30dp"
+                    android:id="@+id/avatarRightHand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="-25dp"
+                    android:layout_marginTop="30dp"
                     android:layout_toLeftOf="@id/avatar_body"
-                    android:src="@drawable/avatar_left_candycane" />
+                    android:src="@drawable/monster_r_normal" />
 
                 <ImageView
                     android:id="@+id/avatar_body"
-                    android:layout_width="240dp"
-                    android:layout_height="280dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/avatar_body_normal" />
 
                 <ImageView
-                    android:layout_width="160dp"
-                    android:layout_height="240dp"
+                    android:id="@+id/avatarLeftHand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="-25dp"
                     android:layout_marginTop="30dp"
                     android:layout_toRightOf="@id/avatar_body"
-                    android:src="@drawable/avatar_right_normal" />
+                    android:src="@drawable/monster_l_normal" />
 
             </LinearLayout>
 
             <ImageView
-                android:layout_width="300dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/avatarFeet"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-70dp"
+                android:src="@drawable/shadow" />
+
+            <ImageView
+                android:id="@+id/avatarFeet"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/avatar_body_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="-20dp"
-                android:src="@drawable/avatar_feet_normal" />
+                android:src="@drawable/monster_f_normal" />
 
         </RelativeLayout>
 

@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
 import com.bbhackathon.trashformer.databinding.ActivitySettingBinding;
+import com.bbhackathon.trashformer.entity.EquipmentEntity;
 import com.bbhackathon.trashformer.entity.UserProfileTable;
 import com.bbhackathon.trashformer.manager.FirebaseAuthManager;
 import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
@@ -56,6 +57,43 @@ public class SettingActivity extends BaseActivity {
             check(ResultType.getResultType(recycleCategory));
         }
         FirebaseDatabaseManager.getInstance().selectUserProfileTable(FirebaseAuthManager.getInstance().getUid(), new SelectUserDataListener());
+
+        getEquipment();
+    }
+
+    private void getEquipment() {
+        Map<String, EquipmentEntity> equipmentEntityMap = LoginManager.getInstance(this).getEquipment();
+
+        for(String key: equipmentEntityMap.keySet()){
+            if(equipmentEntityMap.get(key).isEquipStatus()){
+                if(key.contains("equipment_h")){
+                    if(key.contains("empty")){
+                        mBinding.avatarHead.setImageDrawable(getResources().getDrawable(R.drawable.monster_h_empty));
+                    }else{
+                        mBinding.avatarHead.setImageDrawable(getDrawable("monster_h_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_r")){
+                    if(key.contains("empty")){
+                        mBinding.avatarRightHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_r_normal));
+                    }else{
+                        mBinding.avatarRightHand.setImageDrawable(getDrawable("monster_r_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_l")){
+                    if(key.contains("empty")){
+                        mBinding.avatarLeftHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_l_normal));
+                    }else{
+                        mBinding.avatarLeftHand.setImageDrawable(getDrawable("monster_l_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_f")){
+                    if(key.contains("empty")){
+                        mBinding.avatarFeet.setImageDrawable(getResources().getDrawable(R.drawable.monster_f_normal));
+                    }else{
+                        mBinding.avatarFeet.setImageDrawable(getDrawable("monster_f_" + key.substring(12)));
+                    }
+                }
+            }
+        }
+
     }
 
     private void initListener() {

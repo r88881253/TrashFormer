@@ -91,7 +91,7 @@ public class EquipmentFragment extends Fragment {
             }
         }
 
-        mAdapter = new EquipmentAdapter(getContext(), mList);
+        mAdapter = new EquipmentAdapter(getActivity(), mList);
         RecyclerView mRecyclerView = rootView.findViewById(R.id.equipmentRecyclerView);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);

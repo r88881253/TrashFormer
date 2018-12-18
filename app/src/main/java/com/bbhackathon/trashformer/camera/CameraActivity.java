@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -107,7 +108,6 @@ public class CameraActivity extends BaseActivity {
 //                Bitmap source = BitmapFactory.decodeResource(this.getResources(), R.drawable.can2);
 //                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(source);
                 cloudLabelDetectTask(image);
-                FirebaseDatabaseManager.getInstance().selectTipsTable(new selectTipsTableListener());
             } else {
                 onBackPressed();
             }
@@ -333,13 +333,33 @@ public class CameraActivity extends BaseActivity {
 
                                         SpannableString span;
                                         Boolean isRightRecycleItem;
-                                        if(resultType == ResultType.getResultType(LoginManager.getInstance(getBaseContext()).getRecycleCategory())){
+                                        TextView tipsTitle = (TextView) findViewById(R.id.tipsTitle);
+                                        LinearLayout successTipsLinearLayout = (LinearLayout) findViewById(R.id.successTipsLinearLayout);
+                                        ImageView successTipsImage = (ImageView) findViewById(R.id.successTipsImage);
+                                        if (resultType == ResultType.getResultType(LoginManager.getInstance(getBaseContext()).getRecycleCategory())) {
                                             span = new SpannableString(getString(R.string.camera_result_success_string) + resultType.getMemo() + "！");
                                             ((TextView) findViewById(R.id.camera_result_exp)).setText(getString(R.string.camera_result_exp) + " +50");
+                                            ((TextView) findViewById(R.id.tipsTitle)).setText(getString(R.string.follow_me));
                                             isRightRecycleItem = true;
-                                        } else{
+
+                                            switch (resultType) {
+                                                case CAN:
+                                                    tipsTitle.setText(getString(R.string.can_tips));
+                                                    successTipsImage.setImageResource(R.drawable.instruction_can);
+                                                    break;
+                                                default:
+                                                    tipsTitle.setText(getString(R.string.can_tips));
+                                                    successTipsImage.setImageResource(R.drawable.instruction_can);
+                                                    break;
+                                            }
+                                            successTipsLinearLayout.setVisibility(View.VISIBLE);
+
+                                        } else {
+                                            successTipsLinearLayout.setVisibility(View.GONE);
+                                            FirebaseDatabaseManager.getInstance().selectTipsTable(new selectTipsTableListener());
+                                            tipsTitle.setText(getString(R.string.you_know));
                                             span = new SpannableString(getString(R.string.camera_result_failed_string) + resultType.getMemo() + "！");
-                                            ((TextView) findViewById(R.id.camera_result_exp)).setText(getString(R.string.camera_result_exp) + " -20");
+                                            ((TextView) findViewById(R.id.camera_result_exp)).setText(getString(R.string.camera_result_exp) + " -20 愛心 -0.5");
                                             isRightRecycleItem = false;
                                         }
 
@@ -354,11 +374,11 @@ public class CameraActivity extends BaseActivity {
 
                                         String cameraResult = "Result : " + resultType.getMemo() + "\n";
 
-                                        for(CameraResultEntity entity: (ArrayList<CameraResultEntity>) getCloudCameraResult(labels)){
+                                        for (CameraResultEntity entity : (ArrayList<CameraResultEntity>) getCloudCameraResult(labels)) {
                                             String text = entity.getText();
                                             float confident = entity.getConfidence();
 
-                                            String result = "text:" + text +"\t\t\t" + "confident:" + confident + "\n";
+                                            String result = "text:" + text + "\t\t\t" + "confident:" + confident + "\n";
                                             cameraResult = cameraResult + result;
                                         }
 

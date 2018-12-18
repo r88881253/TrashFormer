@@ -2,10 +2,13 @@ package com.bbhackathon.trashformer.base;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -13,6 +16,8 @@ import com.bbhackathon.trashformer.R;
 
 
 public class BaseActivity extends AppCompatActivity {
+    private final String TAG = BaseActivity.class.getSimpleName();
+
     ProgressDialog progressDialog;
     AlertDialog alertDialog;
 
@@ -64,5 +69,13 @@ public class BaseActivity extends AppCompatActivity {
         // 3. Get the AlertDialog from create()
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public Drawable getDrawable(String resourceName) {
+        Log.d(TAG, resourceName);
+        Resources resources = this.getResources();
+        final int resourceId = resources.getIdentifier(resourceName, "drawable",
+                this.getPackageName());
+        return resources.getDrawable(resourceId);
     }
 }

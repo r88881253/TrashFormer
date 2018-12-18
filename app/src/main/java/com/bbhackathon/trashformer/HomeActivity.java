@@ -4,11 +4,9 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bbhackathon.trashformer.base.BaseActivity;
@@ -38,6 +35,7 @@ import com.bbhackathon.trashformer.manager.FirebaseDatabaseManager;
 import com.bbhackathon.trashformer.manager.LoginManager;
 import com.bbhackathon.trashformer.present.PresentDialog;
 import com.bbhackathon.trashformer.setting.password.PasswordDialog;
+import com.bbhackathon.trashformer.util.ExpTable;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -81,8 +79,7 @@ public class HomeActivity extends BaseActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_home);
 
         if (FirebaseAuthManager.getInstance() != null) {
-            Toast.makeText(getBaseContext(), FirebaseAuthManager.getInstance().getUser().getEmail(),
-                    Toast.LENGTH_SHORT).show();
+            Log.d(TAG, FirebaseAuthManager.getInstance().getUser().getEmail());
         }
 
         hideKeyboard();
@@ -132,7 +129,6 @@ public class HomeActivity extends BaseActivity {
                 }
             }
         }
-
     }
 
     private void initListner() {
@@ -280,7 +276,12 @@ public class HomeActivity extends BaseActivity {
                     mBinding.giftImageView.setClickable(false);
                 }
 
+                if(ExpTable.expMap.get(userProfile.getLevel()) != null){
+                    mBinding.homeProgressBar.setMax(ExpTable.expMap.get(userProfile.getLevel()));
+                    mBinding.homeProgressBar.setProgress(userProfile.getExp());
+                }
 
+//                selectRequireExp(userProfile.getLevel());
                 //            if(userProfile.getMissionGiftCount() != null){mBinding.missionNumber.setText(userProfile.getMissionGiftCount()/);}
             }
             mBinding.homeRelativeLayout.setVisibility(View.VISIBLE);
@@ -327,6 +328,7 @@ public class HomeActivity extends BaseActivity {
     private void setHeartStatus(float heartCount) {
         initHeartStatus();
         if (heartCount != 0) {
+
             if (heartCount >= 0.5) {
                 mBinding.heart1.setImageResource(R.drawable.heart_half);
             }
@@ -358,6 +360,21 @@ public class HomeActivity extends BaseActivity {
                 mBinding.heart5.setImageResource(R.drawable.heart);
             }
 
+            if(heartCount <= 0){
+                mBinding.heart1.setImageResource(R.drawable.heart_empty);
+            }
+            if(heartCount <= 1){
+                mBinding.heart2.setImageResource(R.drawable.heart_empty);
+            }
+            if(heartCount <= 2){
+                mBinding.heart3.setImageResource(R.drawable.heart_empty);
+            }
+            if(heartCount <= 3){
+                mBinding.heart4.setImageResource(R.drawable.heart_empty);
+            }
+            if(heartCount <= 4){
+                mBinding.heart5.setImageResource(R.drawable.heart_empty);
+            }
         }
 
         if(heartCount <= 0){
@@ -368,11 +385,11 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initHeartStatus() {
-        mBinding.heart1.setImageResource(android.R.color.white);
-        mBinding.heart2.setImageResource(android.R.color.white);
-        mBinding.heart3.setImageResource(android.R.color.white);
-        mBinding.heart4.setImageResource(android.R.color.white);
-        mBinding.heart5.setImageResource(android.R.color.white);
+        mBinding.heart1.setImageResource(R.drawable.heart_empty);
+        mBinding.heart2.setImageResource(R.drawable.heart_empty);
+        mBinding.heart3.setImageResource(R.drawable.heart_empty);
+        mBinding.heart4.setImageResource(R.drawable.heart_empty);
+        mBinding.heart5.setImageResource(R.drawable.heart_empty);
     }
 
     private void cloudLabelDetectTask(Bitmap source) {
@@ -635,7 +652,6 @@ public class HomeActivity extends BaseActivity {
                         }
                     }
                 });
-
     }
 
     private Task<String> reduceGiftTask() {
@@ -659,6 +675,64 @@ public class HomeActivity extends BaseActivity {
                     }
                 });
     }
+
+
+    private void selectRequireExp(int level) {
+        selectRequireExpTask(level)
+                .addOnCompleteListener(new OnCompleteListener<Integer>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Integer> task) {
+                        if (!task.isSuccessful()) {
+                            Exception e = task.getException();
+                            if (e instanceof FirebaseFunctionsException) {
+                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                FirebaseFunctionsException.Code code = ffe.getCode();
+                                Object details = ffe.getDetails();
+                            }
+                            Log.d("selectRequireExpTask: ", "failed");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                            builder.setTitle(getString(R.string.app_name))
+                                    .setMessage(getString(R.string.something_failed))
+                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        } else {
+                            Integer result = (Integer) task.getResult();
+                            Log.d("selectRequireExpTask: ", "successed");
+                            Log.d(TAG, String.valueOf(result));
+                        }
+                    }
+                });
+    }
+
+
+    private Task<Integer> selectRequireExpTask(int level) {
+        FirebaseFunctions mFunctions;
+        mFunctions = FirebaseFunctions.getInstance();
+
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+        data.put("level", level);
+
+        return mFunctions
+                .getHttpsCallable("selectRequireExp")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, Integer>() {
+                    @Override
+                    public Integer then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        Map<String, Object> result = (Map<String, Object>) task.getResult().getData();
+                        Log.d(TAG, result.toString());
+                        return (Integer) result.get("requireExp");
+                    }
+                });
+    }
+
 
     /**
      * 讀取照片旋轉角度
@@ -719,10 +793,4 @@ public class HomeActivity extends BaseActivity {
         this.finish();
     }
 
-    private Drawable getDrawable(String resourceName) {
-        Resources resources = this.getResources();
-        final int resourceId = resources.getIdentifier(resourceName, "drawable",
-                this.getPackageName());
-        return resources.getDrawable(resourceId);
-    }
 }

@@ -25,7 +25,7 @@
     <item
         android:width="240dp"
         android:height="240dp"
-        android:drawable="@drawable/xmas_hat"
+        android:drawable="@drawable/equipment_h_xmas_hat"
         android:gravity="center">
         <scale></scale>
     </item>

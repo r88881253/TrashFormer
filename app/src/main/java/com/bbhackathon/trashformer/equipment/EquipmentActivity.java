@@ -1,16 +1,16 @@
 package com.bbhackathon.trashformer.equipment;
 
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Button;
 
 import com.bbhackathon.trashformer.R;
 import com.bbhackathon.trashformer.base.BaseActivity;
+import com.bbhackathon.trashformer.databinding.ActivityEquipmentBinding;
 import com.bbhackathon.trashformer.entity.EquipmentEntity;
 import com.bbhackathon.trashformer.manager.LoginManager;
 
@@ -18,16 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class EquipmentActivity extends BaseActivity {
+public class EquipmentActivity extends BaseActivity implements EquipmentAdapterCallback{
 
     private EquipmentViewPager mViewPager;
     private TabLayout mTabLayout;
     public static int lastPosition = 0;
+    private ActivityEquipmentBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_equipment);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_equipment);
 
         mViewPager = (EquipmentViewPager) findViewById(R.id.equipment_viewPager);
 
@@ -51,6 +52,42 @@ public class EquipmentActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         setStatusBar(R.color.btn_login_background_806EE6);
+
+        getEquipment();
+    }
+
+    private void getEquipment() {
+        Map<String, EquipmentEntity> equipmentEntityMap = LoginManager.getInstance(this).getEquipment();
+
+        for(String key: equipmentEntityMap.keySet()){
+            if(equipmentEntityMap.get(key).isEquipStatus()){
+                if(key.contains("equipment_h")){
+                    if(key.contains("empty")){
+                        mBinding.avatarHead.setImageDrawable(getResources().getDrawable(R.drawable.monster_h_empty));
+                    }else{
+                        mBinding.avatarHead.setImageDrawable(getDrawable("monster_h_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_r")){
+                    if(key.contains("empty")){
+                        mBinding.avatarRightHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_r_normal));
+                    }else{
+                        mBinding.avatarRightHand.setImageDrawable(getDrawable("monster_r_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_l")){
+                    if(key.contains("empty")){
+                        mBinding.avatarLeftHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_l_normal));
+                    }else{
+                        mBinding.avatarLeftHand.setImageDrawable(getDrawable("monster_l_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_f")){
+                    if(key.contains("empty")){
+                        mBinding.avatarFeet.setImageDrawable(getResources().getDrawable(R.drawable.monster_f_normal));
+                    }else{
+                        mBinding.avatarFeet.setImageDrawable(getDrawable("monster_f_" + key.substring(12)));
+                    }
+                }
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -116,6 +153,41 @@ public class EquipmentActivity extends BaseActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+    }
+
+    @Override
+    public void setEquipment(){
+        Map<String, EquipmentEntity> equipmentEntityMap = LoginManager.getInstance(this).getEquipment();
+
+        for(String key: equipmentEntityMap.keySet()){
+            if(equipmentEntityMap.get(key).isEquipStatus()){
+                if(key.contains("equipment_h")){
+                    if(key.contains("empty")){
+                        mBinding.avatarHead.setImageDrawable(getResources().getDrawable(R.drawable.monster_h_empty));
+                    }else{
+                        mBinding.avatarHead.setImageDrawable(getDrawable("monster_h_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_r")){
+                    if(key.contains("empty")){
+                        mBinding.avatarRightHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_r_normal));
+                    }else{
+                        mBinding.avatarRightHand.setImageDrawable(getDrawable("monster_r_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_l")){
+                    if(key.contains("empty")){
+                        mBinding.avatarLeftHand.setImageDrawable(getResources().getDrawable(R.drawable.monster_l_normal));
+                    }else{
+                        mBinding.avatarLeftHand.setImageDrawable(getDrawable("monster_l_" + key.substring(12)));
+                    }
+                } else if(key.contains("equipment_f")){
+                    if(key.contains("empty")){
+                        mBinding.avatarFeet.setImageDrawable(getResources().getDrawable(R.drawable.monster_f_normal));
+                    }else{
+                        mBinding.avatarFeet.setImageDrawable(getDrawable("monster_f_" + key.substring(12)));
+                    }
+                }
+            }
         }
     }
 }
